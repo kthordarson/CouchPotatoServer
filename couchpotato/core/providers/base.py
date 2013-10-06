@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from couchpotato.core.event import addEvent, fireEvent
 from couchpotato.core.helpers.variable import tryFloat, mergeDicts, md5, \
     possibleTitles, getTitle

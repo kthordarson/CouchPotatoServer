@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from couchpotato.core.helpers.variable import getImdb, md5
 from couchpotato.core.logger import CPLog
 from couchpotato.core.providers.base import YarrProvider

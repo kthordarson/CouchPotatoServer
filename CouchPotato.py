@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from logging import handlers
 from os.path import dirname
 import logging

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from couchpotato.core.event import addEvent
 from couchpotato.core.helpers.encoding import toUnicode
 from couchpotato.core.helpers.variable import getTitle, splitString

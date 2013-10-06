@@ -1,3 +1,4 @@
+# coding=utf-8
 from couchpotato import get_session
 from couchpotato.api import addApiView
 from couchpotato.core.event import addEvent, fireEvent
@@ -164,7 +165,7 @@ class ProfilePlugin(Plugin):
 
         profiles = [{
             'label': 'Best',
-            'qualities': ['720p', '1080p', 'brrip', 'dvdrip']
+            'qualities': ['720p', '1080p', 'brrip', 'dvdrip', 'deildu']
         }, {
             'label': 'HD',
             'qualities': ['720p', '1080p']

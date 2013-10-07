@@ -1,4 +1,4 @@
-from bs4 import SoupStrainer, BeautifulSoup
+from BeautifulSoup import SoupStrainer, BeautifulSoup
 from couchpotato.core.helpers.encoding import tryUrlencode
 from couchpotato.core.helpers.variable import mergeDicts, getTitle
 from couchpotato.core.logger import CPLog

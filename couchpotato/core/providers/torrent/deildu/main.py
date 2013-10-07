@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#from BeautifulSoup from bs4 import BeautifulSoup
 from bs4 import BeautifulSoup
 from couchpotato.core.helpers.encoding import simplifyString, tryUrlencode
 from couchpotato.core.helpers.variable import tryInt
@@ -19,12 +20,12 @@ class Deildu(TorrentProvider):
         'base': 'http://deildu.net/',
     }
 
-    http_time_between_calls = 5 #seconds
+    http_time_between_calls = 5  #seconds
 
     def _searchOnTitle(self, title, movie, quality, results):
 
-        q = '%s %s' % (simplifyString(title), movie['library']['year'])
-        #q = '%s' % (simplifyString(title))
+        #q = '%s %s' % (simplifyString(title), movie['library']['year'])
+        q = '%s' % (simplifyString(title))
 
         arguments = tryUrlencode({
             'search': q,
@@ -47,26 +48,28 @@ class Deildu(TorrentProvider):
 
             try:
                 resultsTable = html.find('table', {'class': 'torrentlist'})
-                entries = resultsTable.find_all('tr')
-                for result in entries[1:]:
+                if resultsTable:
+                    entries = resultsTable.find_all('tr')
+                    for result in entries[1:]:
 
-                    all_cells = result.find_all('td')
+                        all_cells = result.find_all('td')
+                        #log.info("Deildu.net found: ",)
 
-                    detail_link = all_cells[1].find('a')
-                    details = detail_link['href']
-                    torrent_id = details.replace('details.php?id=', '')
-                    torrent_id = details.replace('&hit=1', '')
+                        detail_link = all_cells[1].find('a')
+                        details = detail_link['href']
+                        torrent_id = details.replace('details.php?id=', '')
+                        torrent_id = details.replace('&hit=1', '')
 
-                    results.append({
-                        'id': torrent_id,
-                        'name': detail_link.get_text().strip(),
-                        'size': self.parseSize(all_cells[6].get_text()),
-                        'seeders': tryInt(all_cells[8].get_text()),
-                        'leechers': tryInt(all_cells[9].get_text()),
-                        'url': self.urls['base'] + all_cells[2].find('a')['href'],
-                        'download': self.loginDownload,
-                        'description': self.urls['base'] + all_cells[1].find('a')['href'],
-                    })
+                        results.append({
+                            'id': torrent_id,
+                            'name': detail_link.get_text().strip(),
+                            'size': self.parseSize(all_cells[6].get_text()),
+                            'seeders': tryInt(all_cells[8].get_text()),
+                            'leechers': tryInt(all_cells[9].get_text()),
+                            'url': self.urls['base'] + all_cells[2].find('a')['href'],
+                            'download': self.loginDownload,
+                            'description': self.urls['base'] + all_cells[1].find('a')['href'],
+                        })
 
             except:
                 log.error('Failed getting results from %s: %s', (self.getName(), traceback.format_exc()))

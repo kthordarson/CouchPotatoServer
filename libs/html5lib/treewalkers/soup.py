@@ -2,7 +2,7 @@ import re
 import gettext
 _ = gettext.gettext
 
-from BeautifulSoup import BeautifulSoup, Declaration, Comment, Tag
+from BeautifulSoup from bs4 import BeautifulSoup, Declaration, Comment, Tag
 from html5lib.constants import namespaces
 import _base
 

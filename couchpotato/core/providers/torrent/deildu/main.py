@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-#from BeautifulSoup from bs4 import BeautifulSoup
-from bs4 import BeautifulSoup
+from BeautifulSoup import BeautifulSoup
+#from BeautifulSoup import BeautifulSoup
 from couchpotato.core.helpers.encoding import simplifyString, tryUrlencode
 from couchpotato.core.helpers.variable import tryInt
 from couchpotato.core.logger import CPLog

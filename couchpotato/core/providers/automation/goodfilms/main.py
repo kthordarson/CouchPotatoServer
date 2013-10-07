@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+from BeautifulSoup import BeautifulSoup
 from couchpotato.core.logger import CPLog
 from couchpotato.core.providers.automation.base import Automation
 

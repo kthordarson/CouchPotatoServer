@@ -22,7 +22,7 @@ from ..language import language_set
 from ..subtitles import get_subtitle_path, ResultSubtitle, EXTENSIONS
 from ..utils import to_unicode
 from ..videos import Episode
-from bs4 import BeautifulSoup
+from BeautifulSoup import BeautifulSoup
 import logging
 import urllib
 try:

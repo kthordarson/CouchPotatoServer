@@ -1,4 +1,5 @@
-from BeautifulSoup import SoupStrainer, BeautifulSoup
+from BeautifulSoup import BeautifulSoup
+import SoupStrainer
 from couchpotato.core.helpers.encoding import tryUrlencode
 from couchpotato.core.helpers.variable import mergeDicts, getTitle
 from couchpotato.core.logger import CPLog

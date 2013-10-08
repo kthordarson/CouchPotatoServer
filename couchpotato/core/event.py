@@ -56,7 +56,7 @@ def removeEvent(name, handler):
 def fireEvent(name, *args, **kwargs):
     if not events.has_key(name): return
 
-    #log.debug('Firing event %s', name)
+    log.debug('Firing event %s', name)
     try:
 
         options = {

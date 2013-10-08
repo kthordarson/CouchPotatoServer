@@ -857,7 +857,7 @@ class Scanner(Plugin):
                 log.debug('Could not detect via guessit "%s": %s', (file_name, traceback.format_exc()))
 
         # Backup to simple
-        cleaned = ' '.join(re.split('\W+', simplifyString(release_name)))
+        cleaned = ' '.join(re.split('[\W\s]+', simplifyString(release_name)))
         cleaned = re.sub(self.clean, ' ', cleaned)
 
         for year_str in [file_name, cleaned]:

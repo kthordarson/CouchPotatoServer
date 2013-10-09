@@ -317,6 +317,12 @@ class MovieSearcher(SearcherBase, MovieTypeBase):
 
         preferred_quality = fireEvent('quality.single', identifier = quality['identifier'], single = True)
 
+        # if icelandic stuff found, return true
+        deildutags= ['texti', 'texta', 'Texta', 'isl', '0xEDsl', '0xCDsl', '0xEDslenskum', '0xCDslenskum', 'Texti', 'eskil']
+        deilduwords = list(set(nzb_words) & set(deildutags) - set(movie_words))
+        if deilduwords:
+            return True
+
         # Contains lower quality string
         if fireEvent('searcher.contains_other_quality', nzb, movie_year = movie['library']['year'], preferred_quality = preferred_quality, single = True):
             log.info2('Wrong: %s, looking for %s', (nzb['name'], quality['label']))
@@ -362,10 +368,6 @@ class MovieSearcher(SearcherBase, MovieTypeBase):
 
                     # if no IMDB link, at least check year
                     if len(movie_words) <= 2 and fireEvent('searcher.correct_year', nzb['name'], movie['library']['year'], 0, single = True):
-                        return True
-                    # if icelandic stuff found, return true
-                    deildutags= ['texti', 'texta', 'Texta', 'isl', '0xEDsl', '0xCDsl', '0xEDslenskum', '0xCDslenskum', 'Texti', 'eskil']
-                    if any(movie_words in tags for tags in deildutags):
                         return True
 
         log.info("Wrong: %s, undetermined naming. Looking for '%s (%s)'", (nzb['name'], movie_name, movie['library']['year']))

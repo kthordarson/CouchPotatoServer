@@ -18,7 +18,7 @@ class Toasty(Notification):
             'title': self.default_title,
             'text': toUnicode(message),
             'sender': toUnicode("CouchPotato"),
-            'image': 'https://raw.github.com/RuudBurger/CouchPotatoServer/master/couchpotato/static/images/homescreen.png',
+            'image': 'https://raw.github.com/kthordarson/CouchPotatoServer/master/couchpotato/static/images/homescreen.png',
         }
 
         try:

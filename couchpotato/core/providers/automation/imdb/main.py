@@ -1,6 +1,6 @@
 import traceback
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from couchpotato import fireEvent
 from couchpotato.core.helpers.rss import RSS
 from couchpotato.core.helpers.variable import getImdb, splitString, tryInt

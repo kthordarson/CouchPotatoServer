@@ -21,7 +21,7 @@ from ..language import language_set, Language
 from ..subtitles import get_subtitle_path, ResultSubtitle
 from ..utils import get_keywords, split_keyword
 from ..videos import Episode, Movie
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import logging
 import urllib
 

@@ -23,7 +23,7 @@ from .videos import Episode, Movie, scan
 from .language import Language
 from collections import defaultdict
 from itertools import groupby
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import guessit
 import logging
 

@@ -1,4 +1,4 @@
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from BeautifulSoup import SoupStrainer
 from couchpotato.core.helpers.encoding import tryUrlencode
 from couchpotato.core.helpers.variable import mergeDicts, getTitle

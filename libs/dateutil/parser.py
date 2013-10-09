@@ -46,8 +46,8 @@ class _timelex(object):
         self.instream = instream
         self.wordchars = ('abcdfeghijklmnopqrstuvwxyz'
                           'ABCDEFGHIJKLMNOPQRSTUVWXYZ_'
-                          '‗אבגדהוזחטיךכלםמןנסעףפץצרשתûü‎‏ÿ'
-                          'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ')
+                          '‗אבגדהוזחטיךכל0xEDמןנסעףפץצרשתûü‎‏ÿ'
+                          'ÀÁÂÃÄÅÆÇÈÉÊËÌ0xCDÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ')
         self.numchars = '0123456789'
         self.whitespace = ' \t\r\n'
         self.charstack = []

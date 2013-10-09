@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from couchpotato.core.logger import CPLog
 from string import ascii_letters, digits
 from urllib import quote_plus
@@ -16,8 +17,8 @@ def toSafeString(original):
 
 def simplifyString(original):
     string = stripAccents(original.lower())
-    string = toSafeString(' '.join(re.split('[\W\s]+', string)))
-    split = re.split('[\W\s]+|_', string.lower())
+    string = toSafeString(' '.join(re.split('[\W\s\-]+', string)))
+    split = re.split('[\W\s\-]+|_', string.lower())
     return toUnicode(' '.join(split))
 
 def toUnicode(original, *args):
@@ -31,6 +32,7 @@ def toUnicode(original, *args):
                 try:
                     return ek(original, *args)
                 except:
+                    log.error('encoding.py: tryunicode vesen')
                     raise
     except:
         log.error('Unable to decode value "%s..." : %s ', (repr(original)[:20], traceback.format_exc()))
@@ -44,8 +46,8 @@ def ss(original, *args):
         from couchpotato.environment import Env
         return u_original.encode(Env.get('encoding'))
     except Exception, e:
-        log.debug('Failed ss encoding char, force UTF8: %s', e)
-        return u_original.encode('UTF-8')
+            log.debug('Failed ss encoding char, force UTF8: %s', e)
+            return u_original.encode('utf8')
 
 def ek(original, *args):
     if isinstance(original, (str, unicode)):
@@ -53,8 +55,11 @@ def ek(original, *args):
             from couchpotato.environment import Env
             return original.decode(Env.get('encoding'))
         except UnicodeDecodeError:
-            raise
-
+            return unicode(original,'utf8')
+        except:
+            log.error('encoding.py: ek vesen')
+            return original
+#            raise
     return original
 
 def isInt(value):

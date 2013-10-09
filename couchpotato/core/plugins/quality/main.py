@@ -20,7 +20,7 @@ class QualityPlugin(Plugin):
         {'identifier': 'bd50', 'hd': True, 'size': (15000, 60000), 'label': 'BR-Disk', 'alternative': ['bd25'], 'allow': ['1080p'], 'ext':[], 'tags': ['bdmv', 'certificate', ('complete', 'bluray')]},
         {'identifier': '1080p', 'hd': True, 'size': (4000, 20000), 'label': '1080p', 'width': 1920, 'height': 1080, 'alternative': [], 'allow': [], 'ext':['mkv', 'm2ts'], 'tags': ['m2ts']},
         {'identifier': '720p', 'hd': True, 'size': (3000, 10000), 'label': '720p', 'width': 1280, 'height': 720, 'alternative': [], 'allow': [], 'ext':['mkv', 'ts']},
-        {'identifier': 'deildu', 'hd': True, 'size': (600, 6000), 'label': 'deildu', 'alternative': ['txt', 'texti', 'texta', 'isl', 'ísl', 'íslenskum', 'islenskum', 'islenskur', 'íslenskur'], 'allow': [], 'ext':['mkv', 'avi'], 'tags': ['texti', 'texta', 'Texta', 'isl', 'ísl', 'Ísl', 'íslenskum', 'Íslenskum', 'Texti', 'eskil']},
+        {'identifier': 'deildu', 'hd': True, 'size': (600, 6000), 'label': 'deildu', 'alternative': ['txt', 'texti', 'texta', 'isl', '0xEDsl', '0xEDslenskum', 'islenskum', 'islenskur', '0xEDslenskur'], 'allow': [], 'ext':['mkv', 'avi'], 'tags': ['texti', 'texta', 'Texta', 'isl', '0xEDsl', '0xCDsl', '0xEDslenskum', '0xCDslenskum', 'Texti', 'eskil']},
         {'identifier': 'brrip', 'hd': True, 'size': (700, 7000), 'label': 'BR-Rip', 'alternative': ['bdrip'], 'allow': ['720p', '1080p'], 'ext':['avi'], 'tags': ['hdtv', 'hdrip', 'webdl', ('web', 'dl')]},
         {'identifier': 'dvdr', 'size': (3000, 10000), 'label': 'DVD-R', 'alternative': [], 'allow': [], 'ext':['iso', 'img'], 'tags': ['pal', 'ntsc', 'video_ts', 'audio_ts']},
         {'identifier': 'dvdrip', 'size': (600, 2400), 'label': 'DVD-Rip', 'width': 720, 'alternative': [], 'allow': [], 'ext':['avi', 'mpg', 'mpeg'], 'tags': [('dvd', 'rip'), ('dvd', 'xvid'), ('dvd', 'divx')]},
@@ -164,7 +164,7 @@ class QualityPlugin(Plugin):
 
         qualities = self.all()
         for cur_file in files:
-            words = re.split('[\W\s]+', cur_file.lower())
+            words = re.split('[\W\s\-]+', cur_file.lower())
 
             found = {}
             for quality in qualities:

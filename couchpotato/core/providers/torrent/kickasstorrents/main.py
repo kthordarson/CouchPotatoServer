@@ -1,4 +1,4 @@
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from couchpotato.core.helpers.variable import tryInt
 from couchpotato.core.logger import CPLog
 from couchpotato.core.providers.torrent.base import TorrentMagnetProvider

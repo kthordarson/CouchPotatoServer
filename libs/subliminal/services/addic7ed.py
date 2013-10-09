@@ -23,7 +23,7 @@ from ..language import Language, language_set
 from ..subtitles import get_subtitle_path, ResultSubtitle
 from ..utils import get_keywords, split_keyword
 from ..videos import Episode
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import logging
 import os
 import re

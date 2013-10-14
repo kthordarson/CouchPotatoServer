@@ -31,7 +31,7 @@ class CascadeOptions(frozenset):
     def __new__(cls, arg):
         values = set([
                     c for c
-                    in re.split('[\W\s\-]*,\s*', arg or "")
+                    in re.split('\s*,\s*', arg or "")
                     if c
                 ])
 

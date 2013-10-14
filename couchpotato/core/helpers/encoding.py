@@ -17,8 +17,8 @@ def toSafeString(original):
 
 def simplifyString(original):
     string = stripAccents(original.lower())
-    string = toSafeString(' '.join(re.split('[\W\s\-]+', string)))
-    split = re.split('[\W\s\-]+|_', string.lower())
+    string = toSafeString(' '.join(re.split('[\W\-]+', string, flags=re.U)))
+    split = re.split('[\W\-]+|_', string.lower(), flags=re.U)
     return toUnicode(' '.join(split))
 
 def toUnicode(original, *args):

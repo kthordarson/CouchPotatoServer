@@ -276,9 +276,9 @@ class MovieSearcher(SearcherBase, MovieTypeBase):
             return False
 
         movie_name = getTitle(movie['library'])
-        movie_words = re.split('[\W\s\-]+', simplifyString(movie_name))
+        movie_words = re.split('[\W\-]+', simplifyString(movie_name), flags=re.U)
         nzb_name = simplifyString(nzb['name'])
-        nzb_words = re.split('[\W\s\-]+', nzb_name)
+        nzb_words = re.split('[\W\-]+', nzb_name, flags=re.U)
 
         # Make sure it has required words
         required_words = splitString(self.conf('required_words', section = 'searcher').lower())
@@ -317,11 +317,6 @@ class MovieSearcher(SearcherBase, MovieTypeBase):
 
         preferred_quality = fireEvent('quality.single', identifier = quality['identifier'], single = True)
 
-        # if icelandic stuff found, return true
-        deildutags= ['texti', 'texta', 'Texta', 'isl', '0xEDsl', '0xCDsl', '0xEDslenskum', '0xCDslenskum', 'Texti', 'eskil']
-        deilduwords = list(set(nzb_words) & set(deildutags) - set(movie_words))
-        if deilduwords:
-            return True
 
         # Contains lower quality string
         if fireEvent('searcher.contains_other_quality', nzb, movie_year = movie['library']['year'], preferred_quality = preferred_quality, single = True):
@@ -359,7 +354,7 @@ class MovieSearcher(SearcherBase, MovieTypeBase):
 
         for raw_title in movie['library']['titles']:
             for movie_title in possibleTitles(raw_title['title']):
-                movie_words = re.split('[\W\s\-]+', simplifyString(movie_title))
+                movie_words = re.split('[\W\-]+', simplifyString(movie_title), flags=re.U)
 
                 if fireEvent('searcher.correct_name', nzb['name'], movie_title, single = True):
                     # if no IMDB link, at least check year range 1
@@ -370,7 +365,17 @@ class MovieSearcher(SearcherBase, MovieTypeBase):
                     if len(movie_words) <= 2 and fireEvent('searcher.correct_year', nzb['name'], movie['library']['year'], 0, single = True):
                         return True
 
+
+        # if icelandic stuff found, return true
+        deildutags= ['texti', 'texta', 'Texta', 'isl', '0xEDsl', '0xCDsl', '0xEDslenskum', '0xCDslenskum', 'Texti', 'eskil']
+        deilduwords = list(set(nzb_words) & set(deildutags) - set(movie_words))
+        if deilduwords:
+            log.info2('Found deilduwords: ')
+            continue
+            #return True
+
         log.info("Wrong: %s, undetermined naming. Looking for '%s (%s)'", (nzb['name'], movie_name, movie['library']['year']))
+
         return False
 
     def couldBeReleased(self, is_pre_release, dates, year = None):

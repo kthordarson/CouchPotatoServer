@@ -145,7 +145,7 @@ class Searcher(SearcherBase):
 
         name = nzb['name']
         size = nzb.get('size', 0)
-        nzb_words = re.split('[\W\s\-]+', simplifyString(name))
+        nzb_words = re.split('[\W\-]+', simplifyString(name), flags=re.U)
 
         qualities = fireEvent('quality.all', single = True)
 
@@ -214,8 +214,8 @@ class Searcher(SearcherBase):
             check_movie = fireEvent('scanner.name_year', check_name, single = True)
 
             try:
-                check_words = filter(None, re.split('[\W\s\-]+', check_movie.get('name', '')))
-                movie_words = filter(None, re.split('[\W\s\-]+', simplifyString(movie_name)))
+                check_words = filter(None, re.split('[\W\-]+', check_movie.get('name', ''), flags=re.U))
+                movie_words = filter(None, re.split('[\W\-]+', simplifyString(movie_name), flags=re.U))
 
                 if len(check_words) > 0 and len(movie_words) > 0 and len(list(set(check_words) - set(movie_words))) == 0:
                     return True

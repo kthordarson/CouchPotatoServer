@@ -165,7 +165,8 @@ class ProfilePlugin(Plugin):
 
         profiles = [{
             'label': 'Best',
-            'qualities': ['720p', '1080p', 'brrip', 'dvdrip', 'deildu']
+#            'qualities': ['720p', '1080p', 'brrip', 'dvdrip', 'deildu']
+            'qualities': ['720p', '1080p', 'brrip', 'dvdrip']
         }, {
             'label': 'HD',
             'qualities': ['720p', '1080p']

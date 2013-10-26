@@ -9,7 +9,7 @@ config = [{
     'groups': [
         {
             'tab': 'searcher',
-            'subtab': 'providers',
+#            'subtab': 'providers',
             'list': 'torrent_providers',
             'name': 'Deildu.net',
             'description': 'See <a href="http://deildu.net">Deildu.net</a>',

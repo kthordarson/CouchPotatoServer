@@ -188,7 +188,7 @@ class Scanner(Plugin):
         for identifier, group in movie_files.iteritems():
             if identifier not in group['identifiers'] and len(identifier) > 0: group['identifiers'].append(identifier)
 
-            log.debug('Grouping files: %s', identifier)
+#            log.debug('Grouping files: %s', identifier)
 
             has_ignored = 0
             for file_path in group['unsorted_files']:
@@ -222,7 +222,7 @@ class Scanner(Plugin):
         # Group the files based on the identifier
         delete_identifiers = []
         for identifier, found_files in path_identifiers.iteritems():
-            log.debug('Grouping files on identifier: %s', identifier)
+#            log.debug('Grouping files on identifier: %s', identifier)
 
             group = movie_files.get(identifier)
             if group:
@@ -249,7 +249,7 @@ class Scanner(Plugin):
         # Group based on folder
         delete_identifiers = []
         for identifier, found_files in path_identifiers.iteritems():
-            log.debug('Grouping files on foldername: %s', identifier)
+#            log.debug('Grouping files on foldername: %s', identifier)
 
             for ff in found_files:
                 new_identifier = self.createStringIdentifier(os.path.dirname(ff), folder)

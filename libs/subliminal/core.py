@@ -269,7 +269,7 @@ def filter_services(services):
     for service_name in services:
         mod = __import__('services.' + service_name, globals=globals(), locals=locals(), fromlist=['Service'], level=-1)
         service = mod.Service
-        if service.required_features is not None and bs4.builder_registry.lookup(*service.required_features) is None:
+        if service.required_features is not None: # and bs4.builder_registry.lookup(*service.required_features) is None:
             logger.warning(u'Service %s not available: none of available features could be used. One of %r required' % (service_name, service.required_features))
             filtered_services.remove(service_name)
     return filtered_services

@@ -431,7 +431,7 @@ class Renamer(Plugin):
                     if os.path.isfile(src):
                         os.remove(src)
 
-                        parent_dir = os.path.normpath(os.path.dirname(src))
+                        parent_dir = unicode(os.path.normpath(os.path.dirname(src)), errors='replace')
                         if delete_folders.count(parent_dir) == 0 and os.path.isdir(parent_dir) and not parent_dir in [destination, movie_folder] and not self.conf('from') in parent_dir:
                             delete_folders.append(parent_dir)
 
@@ -710,6 +710,8 @@ Remove it if you want it to be renamed (again, or at least let it try again)
                                     fireEvent('release.update_status', rel.id, status = snatched_status, single = True)
 
                                     # Tag folder if it is in the 'from' folder and it will not be processed because it is still downloading
+                                    # ok herna er vesen
+                                    item['folder'] = unicode(item['folder'], errors='replace')
                                     if item['folder'] and self.conf('from') in item['folder']:
                                         self.tagDir(item['folder'], 'downloading')
 

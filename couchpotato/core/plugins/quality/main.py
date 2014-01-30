@@ -17,11 +17,11 @@ log = CPLog(__name__)
 class QualityPlugin(Plugin):
 
     qualities = [
-        {'identifier': 'bd50', 'hd': True, 'size': (15000, 60000), 'label': 'BR-Disk', 'alternative': ['bd25','isltexti'], 'allow': ['1080p','isltexti'], 'ext':[], 'tags': ['bdmv', 'certificate', ('complete', 'bluray')]},
+        {'identifier': 'bd50', 'hd': True, 'size': (15000, 60000), 'label': 'BR-Disk', 'alternative': ['bd25', 'isltexti'], 'allow': ['1080p', 'isltexti'], 'ext':[], 'tags': ['bdmv', 'certificate', ('complete', 'bluray')]},
         {'identifier': '1080p', 'hd': True, 'size': (4000, 20000), 'label': '1080p', 'width': 1920, 'height': 1080, 'alternative': ['isltexti'], 'allow': ['isltexti'], 'ext':['mkv', 'm2ts'], 'tags': ['m2ts']},
         {'identifier': '720p', 'hd': True, 'size': (3000, 10000), 'label': '720p', 'width': 1280, 'height': 720, 'alternative': ['isltexti'], 'allow': ['isltexti'], 'ext':['mkv', 'ts']},
         {'identifier': 'isltexti', 'hd': True, 'size': (600, 6000), 'label': 'isltexti', 'alternative': ['txt', 'texti', 'texta', 'isl', '0xEDsl', '0xEDslenskum', 'islenskum', 'islenskur', '0xEDslenskur'], 'allow': [], 'ext':['mkv', 'avi'], 'tags': ['texti', 'texta', 'Texta', 'isl', '0xEDsl', '0xCDsl', '0xEDslenskum', '0xCDslenskum', 'Texti', 'eskil']},
-        {'identifier': 'brrip', 'hd': True, 'size': (700, 7000), 'label': 'BR-Rip', 'alternative': ['bdrip','isltexti'], 'allow': ['720p', '1080p','isltexti'], 'ext':['avi'], 'tags': ['hdtv', 'hdrip', 'webdl', ('web', 'dl')]},
+        {'identifier': 'brrip', 'hd': True, 'size': (700, 7000), 'label': 'BR-Rip', 'alternative': ['bdrip', 'isltexti'], 'allow': ['720p', '1080p', 'isltexti'], 'ext':['avi'], 'tags': ['hdtv', 'hdrip', 'webdl', ('web', 'dl')]},
         {'identifier': 'dvdr', 'size': (3000, 10000), 'label': 'DVD-R', 'alternative': ['isltexti'], 'allow': ['isltexti'], 'ext':['iso', 'img'], 'tags': ['pal', 'ntsc', 'video_ts', 'audio_ts']},
         {'identifier': 'dvd', 'size': (3000, 10000), 'label': 'DVD', 'alternative': ['isltexti'], 'allow': ['isltexti', 'dvd'], 'ext':['iso', 'img'], 'tags': ['pal', 'ntsc', 'video_ts', 'audio_ts']},
         {'identifier': 'dvdrip', 'size': (600, 2400), 'label': 'DVD-Rip', 'width': 720, 'alternative': ['isltexti'], 'allow': ['isltexti'], 'ext':['avi', 'mpg', 'mpeg'], 'tags': [('dvd', 'rip'), ('dvd', 'xvid'), ('dvd', 'divx')]},
@@ -43,7 +43,7 @@ class QualityPlugin(Plugin):
         addEvent('quality.pre_releases', self.preReleases)
 
         addApiView('quality.size.save', self.saveSize)
-        addApiView('quality.list', self.allView, docs = {
+        addApiView('quality.list', self.allView, docs={
             'desc': 'List all available qualities',
             'return': {'type': 'object', 'example': """{
             'success': True,
@@ -51,7 +51,8 @@ class QualityPlugin(Plugin):
 }"""}
         })
 
-        addEvent('app.initialize', self.fill, priority = 10)
+        addEvent('app.initialize', self.fill, priority=10)
+        addEvent('app.test', self.doTest)
 
     def preReleases(self):
         return self.pre_releases
@@ -80,7 +81,7 @@ class QualityPlugin(Plugin):
         self.cached_qualities = temp
         return temp
 
-    def single(self, identifier = ''):
+    def single(self, identifier=''):
 
         db = get_session()
         quality_dict = {}
@@ -168,10 +169,14 @@ class QualityPlugin(Plugin):
         if not extra: extra = {}
 
         # Create hash for cache
-        cache_key = md5(str([f.replace('.' + getExt(f), '') for f in files]))
+#        cache_key = md5(str([f.replace('.' + getExt(f), '') for f in files]))
+#        cached = self.getCache(cache_key)
+#        if cached and len(extra) == 0: return cached
+        # Create hash for cache
+        cache_key = str([f.replace('.' + getExt(f), '') if len(getExt(f)) < 4 else f for f in files])
         cached = self.getCache(cache_key)
-        if cached and len(extra) == 0: return cached
-
+        if cached and len(extra) == 0:
+            return cached
         qualities = self.all()
 
         # Start with 0
@@ -217,7 +222,8 @@ class QualityPlugin(Plugin):
             'identifier': 10,
             'label': 10,
             'alternative': 9,
-            'tags': 9
+            'tags': 9,
+            'ext': 3,
         }
 
         # Check alt and tags
@@ -230,9 +236,9 @@ class QualityPlugin(Plugin):
                     if len(set(words) & set(alt)) == len(alt):
                         log.debug('Found %s via %s %s in %s', (quality['identifier'], tag_type, quality.get(tag_type), cur_file))
                         score += points.get(tag_type)
-                    elif len(set(words) & set(alt)) > 0:
-                        log.debug('Found %s via partial %s %s in %s', (quality['identifier'], tag_type, quality.get(tag_type), cur_file))
-                        score += points.get(tag_type) / 3
+#                    elif len(set(words) & set(alt)) > 0:
+#                        log.debug('Found %s via partial %s %s in %s', (quality['identifier'], tag_type, quality.get(tag_type), cur_file))
+#                        score += points.get(tag_type) / 3
 
                 if (isinstance(alt, (str, unicode)) and ss(alt.lower()) in cur_file.lower()):
                     log.debug('Found %s via %s %s in %s', (quality['identifier'], tag_type, quality.get(tag_type), cur_file))
@@ -241,6 +247,13 @@ class QualityPlugin(Plugin):
             if list(set(qualities) & set(words)):
                 log.debug('Found %s via %s %s in %s', (quality['identifier'], tag_type, quality.get(tag_type), cur_file))
                 score += points.get(tag_type)
+
+        # Check extention
+        for ext in quality.get('ext', []):
+            if ext == words[-1]:
+                log.debug('Found %s extension in %s', (ext, cur_file))
+                score += points['ext']
+
 
         return score
 
@@ -283,3 +296,28 @@ class QualityPlugin(Plugin):
                 except:
                     log.debug('sma vesen')
                     score[allow] -= 10
+
+    def doTest(self):
+        tests = {
+            'Movie Name (1999)-DVD-Rip.avi': 'dvdrip',
+            'Movie Name 1999 720p Bluray.mkv': '720p',
+            'Movie Name 1999 BR-Rip 720p.avi': 'brrip',
+            'Movie Name 1999 720p Web Rip.avi': 'scr',
+            'Movie Name 1999 Web DL.avi': 'brrip',
+            'Movie.Name.1999.1080p.WEBRip.H264-Group': 'scr',
+            'Movie.Name.1999.DVDRip-Group': 'dvdrip',
+            'Movie.Name.1999.DVD-Rip-Group': 'dvdrip',
+            'Movie.Name.1999.DVD-R-Group': 'dvdr',
+            'Movie.Name.Camelie.1999.720p.BluRay.x264-Group': '720p',
+        }
+        correct = 0
+        for name in tests:
+            success = self.guess([name]).get('identifier') == tests[name]
+            if not success:
+                log.error('%s failed check, thinks it\'s %s', (name, self.guess([name]).get('identifier')))
+                correct += success
+            if correct == len(tests):
+                log.info('Quality test successful')
+                return True
+            else:
+                log.error('Quality test failed: %s out of %s succeeded', (correct, len(tests)))

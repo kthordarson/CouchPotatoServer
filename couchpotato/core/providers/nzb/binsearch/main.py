@@ -65,7 +65,7 @@ class BinSearch(NZBProvider):
                         total = tryInt(parts.group('total'))
                         parts = tryInt(parts.group('parts'))
 
-                        if (total / parts) < 0.95 or ((total / parts) >= 0.95 and not 'par2' in info.text.lower()):
+                        if (total / parts) < 0.95 or ((total / parts) >= 0.95 and not ('par2' in info.text.lower() or 'pa3' in info.text.lower())):
                             log.info2('Wrong: \'%s\', not complete: %s out of %s', (item['name'], parts, total))
                             return False
 
@@ -90,13 +90,13 @@ class BinSearch(NZBProvider):
 
     def download(self, url = '', nzb_id = ''):
 
-        params = {
+        data = {
             'action': 'nzb',
             nzb_id: 'on'
         }
 
         try:
-            return self.urlopen(url, params = params, show_error = False)
+            return self.urlopen(url, data = data, show_error = False)
         except:
             log.error('Failed getting nzb from %s: %s', (self.getName(), traceback.format_exc()))
 

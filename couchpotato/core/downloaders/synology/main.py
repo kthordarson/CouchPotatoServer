@@ -1,8 +1,10 @@
 from couchpotato.core.downloaders.base import Downloader
 from couchpotato.core.helpers.encoding import isInt
+from couchpotato.core.helpers.variable import cleanHost
 from couchpotato.core.logger import CPLog
 import json
 import requests
+import traceback
 
 log = CPLog(__name__)
 
@@ -10,17 +12,17 @@ log = CPLog(__name__)
 class Synology(Downloader):
 
     protocol = ['nzb', 'torrent', 'torrent_magnet']
-    log = CPLog(__name__)
+    status_support = False
 
-    def download(self, data = None, movie = None, filedata = None):
-        if not movie: movie = {}
+    def download(self, data = None, media = None, filedata = None):
+        if not media: media = {}
         if not data: data = {}
 
         response = False
         log.error('Sending "%s" (%s) to Synology.', (data['name'], data['protocol']))
 
         # Load host from config and split out port.
-        host = self.conf('host').split(':')
+        host = cleanHost(self.conf('host'), protocol = False).split(':')
         if not isInt(host[1]):
             log.error('Config properties are not filled in correctly, port is missing.')
             return False
@@ -34,14 +36,14 @@ class Synology(Downloader):
             elif data['protocol'] in ['nzb', 'torrent']:
                 log.info('Adding %s' % data['protocol'])
                 if not filedata:
-                    log.error('No %s data found' % data['protocol'])
+                    log.error('No %s data found', data['protocol'])
                 else:
                     filename = data['name'] + '.' + data['protocol']
                     response = srpc.create_task(filename = filename, filedata = filedata)
-        except Exception, err:
-            log.error('Exception while adding torrent: %s', err)
+        except:
+            log.error('Exception while adding torrent: %s', traceback.format_exc())
         finally:
-            return response
+            return self.downloadReturnId('') if response else False
 
     def getEnabledProtocol(self):
         if self.conf('use_for') == 'both':

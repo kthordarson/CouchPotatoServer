@@ -3,7 +3,7 @@ from couchpotato import get_session
 from couchpotato.api import addApiView
 from couchpotato.core.event import addEvent
 from couchpotato.core.helpers.encoding import toUnicode, ss
-from couchpotato.core.helpers.variable import mergeDicts, md5, getExt
+from couchpotato.core.helpers.variable import mergeDicts, getExt
 from couchpotato.core.logger import CPLog
 from couchpotato.core.plugins.base import Plugin
 from couchpotato.core.settings.model import Quality, Profile, ProfileType
@@ -26,10 +26,8 @@ class QualityPlugin(Plugin):
         {'identifier': 'dvd', 'size': (3000, 10000), 'label': 'DVD', 'alternative': ['isltexti'], 'allow': ['isltexti', 'dvd'], 'ext':['iso', 'img'], 'tags': ['pal', 'ntsc', 'video_ts', 'audio_ts']},
         {'identifier': 'dvdrip', 'size': (600, 2400), 'label': 'DVD-Rip', 'width': 720, 'alternative': ['isltexti'], 'allow': ['isltexti'], 'ext':['avi', 'mpg', 'mpeg'], 'tags': [('dvd', 'rip'), ('dvd', 'xvid'), ('dvd', 'divx')]},
         {'identifier': 'scr', 'size': (600, 1600), 'label': 'Screener', 'alternative': ['screener', 'dvdscr', 'ppvrip', 'dvdscreener', 'hdscr'], 'allow': ['dvdr', 'dvd', 'dvdrip'], 'ext':['avi', 'mpg', 'mpeg'], 'tags': ['webrip', ('web', 'rip')]},
-        {'identifier': 'r5', 'size': (600, 1000), 'label': 'R5', 'alternative': ['r6'], 'allow': ['dvdr'], 'ext':['avi', 'mpg', 'mpeg']},
-        {'identifier': 'tc', 'size': (600, 1000), 'label': 'TeleCine', 'alternative': ['telecine'], 'allow': [], 'ext':['avi', 'mpg', 'mpeg']},
-        {'identifier': 'ts', 'size': (600, 1000), 'label': 'TeleSync', 'alternative': ['telesync', 'hdts'], 'allow': [], 'ext':['avi', 'mpg', 'mpeg']},
-        {'identifier': 'cam', 'size': (600, 1000), 'label': 'Cam', 'alternative': ['camrip', 'hdcam'], 'allow': [], 'ext':['avi', 'mpg', 'mpeg']}
+        {'identifier': 'ts', 'size': (600, 1000), 'label': 'TeleSync', 'alternative': ['telesync', 'hdts'], 'allow': [], 'ext':[]},
+        {'identifier': 'cam', 'size': (600, 1000), 'label': 'Cam', 'alternative': ['camrip', 'hdcam'], 'allow': [], 'ext':[]}
     ]
     pre_releases = ['cam', 'ts', 'tc', 'r5', 'scr']
 
@@ -52,6 +50,8 @@ class QualityPlugin(Plugin):
         })
 
         addEvent('app.initialize', self.fill, priority=10)
+        addEvent('app.test', self.doTest)
+
         addEvent('app.test', self.doTest)
 
     def preReleases(self):
@@ -169,7 +169,7 @@ class QualityPlugin(Plugin):
         if not extra: extra = {}
 
         # Create hash for cache
-#        cache_key = md5(str([f.replace('.' + getExt(f), '') for f in files]))
+        cache_key = str([f.replace('.' + getExt(f), '') if len(getExt(f)) < 4 else f for f in files])
 #        cached = self.getCache(cache_key)
 #        if cached and len(extra) == 0: return cached
         # Create hash for cache
@@ -236,13 +236,10 @@ class QualityPlugin(Plugin):
                     if len(set(words) & set(alt)) == len(alt):
                         log.debug('Found %s via %s %s in %s', (quality['identifier'], tag_type, quality.get(tag_type), cur_file))
                         score += points.get(tag_type)
-#                    elif len(set(words) & set(alt)) > 0:
-#                        log.debug('Found %s via partial %s %s in %s', (quality['identifier'], tag_type, quality.get(tag_type), cur_file))
-#                        score += points.get(tag_type) / 3
 
                 if (isinstance(alt, (str, unicode)) and ss(alt.lower()) in cur_file.lower()):
                     log.debug('Found %s via %s %s in %s', (quality['identifier'], tag_type, quality.get(tag_type), cur_file))
-                    score += points.get(tag_type)
+                    score += points.get(tag_type) / 2
 
             if list(set(qualities) & set(words)):
                 log.debug('Found %s via %s %s in %s', (quality['identifier'], tag_type, quality.get(tag_type), cur_file))
@@ -321,3 +318,5 @@ class QualityPlugin(Plugin):
                 return True
             else:
                 log.error('Quality test failed: %s out of %s succeeded', (correct, len(tests)))
+
+

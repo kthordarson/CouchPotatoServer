@@ -2,6 +2,7 @@
 from couchpotato.core.logger import CPLog
 from string import ascii_letters, digits
 from urllib import quote_plus
+import os
 import re
 import traceback
 import unicodedata
@@ -48,6 +49,31 @@ def ss(original, *args):
     except Exception, e:
             log.debug('Failed ss encoding char, force UTF8: %s', e)
             return u_original.encode('utf8')
+
+def sp(path, *args):
+
+    # Standardise encoding, normalise case, path and strip trailing '/' or '\'
+    if not path or len(path) == 0:
+        return path
+
+    # convert windows path (from remote box) to *nix path
+    if os.path.sep == '/' and '\\' in path:
+        path = '/' + path.replace(':', '').replace('\\', '/')
+
+    path = os.path.normpath(ss(path, *args))
+
+    # Remove any trailing path separators
+    if path != os.path.sep:
+        path = path.rstrip(os.path.sep)
+
+    # Add a trailing separator in case it is a root folder on windows (crashes guessit)
+    if len(path) == 2 and path[1] == ':':
+        path = path + os.path.sep
+
+    # Replace *NIX ambiguous '//' at the beginning of a path with '/' (crashes guessit)
+    path = re.sub('^//', '/', path)
+
+    return path
 
 def ek(original, *args):
     if isinstance(original, (str, unicode)):

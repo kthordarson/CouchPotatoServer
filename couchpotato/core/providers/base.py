@@ -12,8 +12,10 @@ import re
 import time
 import traceback
 import xml.etree.ElementTree as XMLTree
+# import urllib2
 
 log = CPLog(__name__)
+
 
 class MultiProvider(Plugin):
 
@@ -37,15 +39,16 @@ class MultiProvider(Plugin):
 
 class Provider(Plugin):
 
-    type = None # movie, show, subtitle, trailer, ...
-    http_time_between_calls = 10 # Default timeout for url requests
+    type = None  # movie, show, subtitle, trailer, ...
+    http_time_between_calls = 10  # Default timeout for url requests
 
     last_available_check = {}
     is_available = {}
 
     def isAvailable(self, test_url):
 
-        if Env.get('dev'): return True
+#        if Env.get('dev'k):
+#            return True
 
         now = time.time()
         host = urlparse(test_url).hostname
@@ -68,6 +71,7 @@ class Provider(Plugin):
         data = self.getCache(cache_key, url, **kwargs)
 
         if data:
+#            log.debug('XXX error %s', data)
             try:
                 data = data.strip()
                 if decode_from:
@@ -96,12 +100,13 @@ class Provider(Plugin):
     def getHTMLData(self, url, **kwargs):
 
         cache_key = '%s%s' % (md5(url), md5('%s' % kwargs.get('data', {})))
+        log.debug("getHTMLData - getCache %s ", url)
         return self.getCache(cache_key, url, **kwargs)
 
 
 class YarrProvider(Provider):
 
-    protocol = None # nzb, torrent, torrent_magnet
+    protocol = None  # nzb, torrent, torrent_magnet
     type = 'movie'
 
     cat_ids = {}

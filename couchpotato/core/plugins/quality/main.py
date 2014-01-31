@@ -248,7 +248,7 @@ class QualityPlugin(Plugin):
         # Check extention
         for ext in quality.get('ext', []):
             if ext == words[-1]:
-                log.debug('Found %s extension in %s', (ext, cur_file))
+#                log.debug('Found %s extension in %s', (ext, cur_file))
                 score += points['ext']
 
 

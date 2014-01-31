@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from couchpotato.core.event import fireEvent, addEvent
 from couchpotato.core.helpers.encoding import ss, toSafeString, \
     toUnicode, sp
@@ -170,6 +171,7 @@ class Plugin(object):
             method = 'post' if len(data) > 0 or files else 'get'
 
             log.info('Opening url: %s %s, data: %s', (method, url, [x for x in data.iterkeys()] if isinstance(data, dict) else 'with data'))
+#            log.info('Opening url: %s %s, data ')
             response = r.request(method, url, verify = False, **kwargs)
 
             data = response.content
@@ -248,12 +250,12 @@ class Plugin(object):
         cache_key_md5 = md5(cache_key)
         cache = Env.get('cache').get(cache_key_md5)
         if cache:
-            if not Env.get('dev'): log.debug('Getting cache %s', cache_key)
+            log.debug('Getting cache %s', cache_key)
             return cache
 
         if url:
             try:
-
+                log.debug('Getting URL %s ', url)
                 cache_timeout = 300
                 if kwargs.has_key('cache_timeout'):
                     cache_timeout = kwargs.get('cache_timeout')
@@ -272,7 +274,7 @@ class Plugin(object):
 
     def setCache(self, cache_key, value, timeout = 300):
         cache_key_md5 = md5(cache_key)
-        log.debug('Setting cache %s', cache_key)
+#        log.debug('Setting cache %s', cache_key)
         Env.get('cache').set(cache_key_md5, value, timeout)
         return value
 

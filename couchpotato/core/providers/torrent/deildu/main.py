@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-#from bs4 import BeautifulSoup
-#from bs4 import BeautifulSoup
 from bs4 import BeautifulSoup
 from couchpotato.core.helpers.encoding import simplifyString, tryUrlencode
 from couchpotato.core.helpers.variable import tryInt
@@ -10,19 +8,19 @@ import traceback
 
 log = CPLog(__name__)
 
-# bleh test
 
 class Deildu(TorrentProvider):
 
     urls = {
         'test': 'http://deildu.net/',
-        'login' : 'http://deildu.net/takelogin.php',
+        'login': 'http://deildu.net/takelogin.php',
         'detail': 'http://deildu.net/details.php?id=%s',
         'search': 'http://deildu.net/browse.php?sort=seeders&type=desc&cat=0',
         'base': 'http://deildu.net/',
     }
 
-    http_time_between_calls = 5  #seconds
+    http_time_between_calls = 5  # seconds
+    last_login_check = None
 
     def _searchOnTitle(self, title, movie, quality, results):
 
@@ -33,29 +31,23 @@ class Deildu(TorrentProvider):
             'search': q,
         })
         url = "%s&%s" % (self.urls['search'], arguments)
-
-        # Cookie login
-        if not self.login_opener and not self.login():
-            return
-
-        data = self.getHTMLData(url, opener = self.login_opener)
-
-        # If nothing found, exit
-        if 'Ekkert fannst!' in data:
-            log.info("Deildu.net reported torrent not found: %s", q)
-            return
-
+        data = self.getHTMLData(url)
         if data:
             html = BeautifulSoup(data)
-
+#            print(html)
+#            log.info("Deildu.net got some data")
+#            log.info("Deildu.net datadump %s", data)
+#            log.info("Deildu.net htmldump %s", html)
+#            log.info("Deildu.net got some data2")
             try:
                 resultsTable = html.find('table', {'class': 'torrentlist'})
+                log.info("Deildu.net looking for resultsTable")
                 if resultsTable:
                     entries = resultsTable.find_all('tr')
                     for result in entries[1:]:
 
                         all_cells = result.find_all('td')
-                        #log.info("Deildu.net found: ",)
+                        log.info("Deildu.net got some restults table: ")
 
                         detail_link = all_cells[1].find('a')
                         details = detail_link['href']
@@ -72,16 +64,20 @@ class Deildu(TorrentProvider):
                             'download': self.loginDownload,
                             'description': self.urls['base'] + all_cells[1].find('a')['href'],
                         })
+                else:
+                    log.info("Deildu.net got no resultsTable")
 
             except:
                 log.error('Failed getting results from %s: %s', (self.getName(), traceback.format_exc()))
-
+        else:
+            log.info("Deildu.net got no data!")
 
     def getLoginParams(self):
-        return tryUrlencode({
+        return {
             'username': self.conf('username'),
             'password': self.conf('password'),
-        })
+        }
 
     def loginSuccess(self, output):
         return 'Login failed!' not in output
+    loginCheckSuccess = loginSuccess

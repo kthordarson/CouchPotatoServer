@@ -5,3 +5,5 @@
 .pydevproject
 *.bak
 .idea/*
+*.swp
+

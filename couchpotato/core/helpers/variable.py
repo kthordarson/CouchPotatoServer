@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from couchpotato.core.helpers.encoding import simplifyString, toSafeString, ss
 from couchpotato.core.logger import CPLog
 import collections
@@ -11,8 +12,10 @@ import sys
 
 log = CPLog(__name__)
 
+
 def fnEscape(pattern):
-    return pattern.replace('[','[[').replace(']','[]]').replace('[[','[[]')
+    return pattern.replace('[', '[[').replace(']', '[]]').replace('[[', '[[]')
+
 
 def link(src, dst):
     if os.name == 'nt':
@@ -21,12 +24,14 @@ def link(src, dst):
     else:
         os.link(src, dst)
 
+
 def symlink(src, dst):
     if os.name == 'nt':
         import ctypes
         if ctypes.windll.kernel32.CreateSymbolicLinkW(unicode(dst), unicode(src), 1 if os.path.isdir(src) else 0) in [0, 1280]: raise ctypes.WinError()
     else:
         os.symlink(src, dst)
+
 
 def getUserDir():
     try:
@@ -36,6 +41,7 @@ def getUserDir():
         pass
 
     return os.path.expanduser('~')
+
 
 def getDownloadDir():
     user_dir = getUserDir()
@@ -48,6 +54,7 @@ def getDownloadDir():
         return os.path.join(user_dir, 'Downloads')
 
     return user_dir
+
 
 def getDataDir():
 
@@ -68,8 +75,10 @@ def getDataDir():
     # Linux
     return os.path.join(user_dir, '.couchpotato')
 
+
 def isDict(object):
     return isinstance(object, dict)
+
 
 def mergeDicts(a, b, prepend_list = False):
     assert isDict(a), isDict(b)
@@ -91,6 +100,7 @@ def mergeDicts(a, b, prepend_list = False):
                     current_dst[key] = current_src[key]
     return dst
 
+
 def removeListDuplicates(seq):
     checked = []
     for e in seq:
@@ -98,25 +108,31 @@ def removeListDuplicates(seq):
             checked.append(e)
     return checked
 
+
 def flattenList(l):
     if isinstance(l, list):
         return sum(map(flattenList, l))
     else:
         return l
 
+
 def md5(text):
     return hashlib.md5(ss(text)).hexdigest()
 
+
 def sha1(text):
     return hashlib.sha1(text).hexdigest()
+
 
 def isLocalIP(ip):
     ip = ip.lstrip('htps:/')
     regex = '/(^127\.)|(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1)$/'
     return re.search(regex, ip) is not None or 'localhost' in ip or ip[:4] == '127.'
 
+
 def getExt(filename):
     return os.path.splitext(filename)[1][1:]
+
 
 def cleanHost(host, protocol = True, ssl = False, username = None, password = None):
 
@@ -129,13 +145,14 @@ def cleanHost(host, protocol = True, ssl = False, username = None, password = No
     if protocol and username and password:
         login = '%s:%s@' % (username, password)
         if not login in host:
-            host = host.replace('://', '://' + login, 1) 
+            host = host.replace('://', '://' + login, 1)
 
     host = host.rstrip('/ ')
     if protocol:
         host += '/'
 
     return host
+
 
 def getImdb(txt, check_inside = False, multiple = False):
 
@@ -232,4 +249,10 @@ def dictIsSubset(a, b):
 
 def isSubFolder(sub_folder, base_folder):
     # Returns True if sub_folder is the same as or inside base_folder
-    return base_folder and sub_folder and os.path.normpath(base_folder).rstrip(os.path.sep) + os.path.sep in os.path.normpath(sub_folder).rstrip(os.path.sep) + os.path.sep
+    try:
+        return base_folder and sub_folder and os.path.normpath(base_folder).rstrip(os.path.sep) + os.path.sep in os.path.normpath(sub_folder).rstrip(os.path.sep) + os.path.sep
+    except:
+        log.error('Error in isSubFolder %s %s', (sub_folder, base_folder))
+    return False
+#    return base_folder and sub_folder and os.path.normpath(base_folder).rstrip(os.path.sep) + os.path.sep in os.path.normpath(sub_folder).rstrip(os.path.sep) + os.path.sep
+

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from couchpotato import get_session
 from couchpotato.core.event import fireEvent, addEvent
 from couchpotato.core.helpers.encoding import toUnicode, simplifyString, ss, sp
@@ -270,8 +271,8 @@ class Scanner(Plugin):
                 break
 
         # leftovers should be empty
-        if leftovers:
-            log.debug('Some files are still left over: %s', leftovers)
+#        if leftovers:
+#            log.debug('Some files are still left over: %s', leftovers)
 
         # Cleaning up used
         for identifier in delete_identifiers:
@@ -328,7 +329,7 @@ class Scanner(Plugin):
                         break
 
                 if not has_new_files:
-                    log.debug('None of the files have changed since %s for %s, skipping.', (time.ctime(newer_than), identifier))
+#                    log.debug('None of the files have changed since %s for %s, skipping.', (time.ctime(newer_than), identifier))
 
                     # Delete the unsorted list
                     del group['unsorted_files']

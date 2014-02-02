@@ -3,16 +3,16 @@ ScopeInfo
 q)q}q(UinstanceqUdefinedqU0/usr/lib/python2.7/site-packages/bs4/__init__.pyUBeautifulSoupq‡†UbuiltinUstr†q	(Ubuiltinq
 Udictqh	h	tUunknown…qUunknown…qh
 UiterqUnone…q‡th
-Ulistqh‡s}q†bUTag.childrenh)q}qhhU//usr/lib/python2.7/site-packages/bs4/element.pyUTagq‡†…h
-hh‡s}q†bUTag.find_allh)q}q(hhU0/usr/lib/python2.7/site-packages/bs4/__init__.pyh‡†h	(h
+Ulistqh‡s}q†bUTag.childrenh)q}qhhU//usr/lib/python2.7/site-packages/bs4/element.pyUTag‡†…h
+hh‡s}q†bUTag.find_allh)q}q(hhU0/usr/lib/python2.7/site-packages/bs4/__init__.pyh‡†h	(h
 hh	h	thhhth
-hh‡s}q†bUTag.findh)q}q(hhU0/usr/lib/python2.7/site-packages/bs4/__init__.pyh‡†h	(h
-hh	h	thhhtUunknown…qs}q†buUplugins/scanner/main.pyq}q(UScanner.determineMovieh)q}q hhhUScannerq!‡†hh‡(h
-hhhts}q"†bUScanner.getDVDFilesh)q#}q$hhhh!‡†h†h
-Usetq%h‡s}q&†bUScanner.getSubtitlesh)q'}q(hhhh!‡†h†hs}q)†bUScanner.getMediaFilesh)q*}q+hhhh!‡†h†h
-h%h‡s}q,†bUScanner.getSubtitlesExtrash)q-}q.hhhh!‡†h†hs}q/†bUScanner.createStringIdentifierh)q0}q1((hhhh!‡†hhhth(hhhh!‡†hhhth(hhhh!‡†hhhthu}q2†bUScanner.getTrailersh)q3}q4hhhh!‡†h†hs}q5†bUScanner.getMetaDatah)q6}q7(hhhh!‡†hhht(h
-hhhts}q8†bUScanner.getMovieExtrash)q9}q:hhhh!‡†h†h
-h%h‡s}q;†bUScanner.keepFileh)q<}q=hhhh!‡†h†hs}q>†bUScanner.getNfoh)q?}q@hhhh!‡†h†hs}qA†bUScanner.isSampleFileh)qB}qChhhh!‡†h†hs}qD†bUScanner.isDVDFileh)qE}qFhhhh!‡†h†hs}qG†bUScanner.filesizeBetweenh)qH}qIhhhh!‡†h(h
-hh	ht‡hs}qJ†bUScanner.getSubtitleLanguageh)qK}qLhhhh!‡†h†(h
-hhhts}qM†buU/usr/lib64/python2.7/os.py}qNUwalkqOh)qP}qQ(hhhhths}qR†bsU0/usr/lib/python2.7/site-packages/bs4/__init__.py}qSUBeautifulSoup.__init__h)qT}qU(hhU0/usr/lib/python2.7/site-packages/bs4/__init__.pyh‡†hhhhhhths}qV†bsU!/usr/lib64/python2.7/traceback.py}qWU
-format_excqXh)qY}qZh…hs}q[†bsUevent.pyq\}q](U	fireEventq^h)q_}q`(h	hh‡hh	hh‡hu}qa†bUerrorHandlerqbh)qc}qdh…hs}qe†buU providers/torrent/deildu/main.pyqf}qgUDeildu.getLoginParamsh)qh}qihhhfUDeilduqj‡†…hs}qk†bsU!/usr/lib64/python2.7/threading.py}ql(UactiveCountqmh)qn}qo)hs}qp†bURLockqqh)qr}qs()hhU!/usr/lib64/python2.7/threading.pyU_RLockqt‡†hh†hu}qu†buu.
+hh‡s}q†bUTag.findh)q}q(hhU0/usr/lib/python2.7/site-packages/bs4/__init__.pyh‡†h	(h
+hh	h	thhhtUunknown…qs}q†buU5/usr/lib/python2.7/site-packages/requests/sessions.py}qUSession.requesth)q}q(UinstanceqUdefinedq U5/usr/lib/python2.7/site-packages/requests/sessions.pyUSessionq!‡†UbuiltinUstr†q"Uunknown…q#Unone…q$h$h$h$h$h$h$h$h$h$h$Uunknown…q%h$tUunknown…q&s}q'†bsUplugins/scanner/main.pyq(}q)(UScanner.getDVDFilesh)q*}q+hhh(UScannerq,‡†h†h
+Usetq-h‡s}q.†bUScanner.getSubtitlesh)q/}q0hhh(h,‡†h†hs}q1†bUScanner.getMediaFilesh)q2}q3hhh(h,‡†h†h
+h-h‡s}q4†bUScanner.filesizeBetweenh)q5}q6hhh(h,‡†h(h
+hh	ht‡hs}q7†bUScanner.createStringIdentifierh)q8}q9((hhh(h,‡†hhhth(hhh(h,‡†hhhth(hhh(h,‡†hhhthu}q:†bUScanner.getTrailersh)q;}q<hhh(h,‡†h†hs}q=†bUScanner.isSampleFileh)q>}q?hhh(h,‡†h†hs}q@†bUScanner.determineMovieh)qA}qBhhh(h,‡†hh‡(h
+hhhts}qC†bUScanner.keepFileh)qD}qEhhh(h,‡†h†hs}qF†bUScanner.getMovieExtrash)qG}qHhhh(h,‡†h†h
+h-h‡s}qI†bUScanner.isDVDFileh)qJ}qKhhh(h,‡†h†hs}qL†bUScanner.getMetaDatah)qM}qN(hhh(h,‡†hhht(h
+hhhts}qO†bUScanner.getNfoh)qP}qQhhh(h,‡†h†hs}qR†bUScanner.getSubtitlesExtrash)qS}qThhh(h,‡†h†hs}qU†bUScanner.getSubtitleLanguageh)qV}qWhhh(h,‡†h†(h
+hhhts}qX†buUplugins/base.pyqY}qZ(UPlugin.setCacheh)q[}q\(hh hYUPluginq]‡†h#h"h#th&s}q^†bUPlugin.waith)q_}q`hh Uplugins/base.pyqah]‡†h"†h&s}qb†bUPlugin.getNameh)qc}qdhh hah]‡†…h&s}qe†bUPlugin.urlopenh)qf}qg(hh hYh]‡†h#h$h$h$h$h$th"s}qh†bh]h)qi}qj}qkUhttp_failed_requestql(UbuiltinqmUtupleqnh"h%ts†buU/usr/lib64/python2.7/os.py}qoUwalkh)qp}qq(hhhhths}qr†bsU0/usr/lib/python2.7/site-packages/bs4/__init__.py}qsUBeautifulSoup.__init__h)qt}qu(hhU0/usr/lib/python2.7/site-packages/bs4/__init__.pyh‡†hhhhhhths}qv†bsU /usr/lib64/python2.7/urlparse.py}qwUurlparseqxh)qy}qzh#h$h$‡h&s}q{†bsU!/usr/lib64/python2.7/traceback.py}q|U
+format_exch)q}}q~(h%…h&h…hu}q†bsUevent.pyq€}q(U	fireEventh)q‚}qƒ(h	hh‡hh	hh‡hu}q„†bUerrorHandlerh)q…}q†h…hs}q‡†buU providers/torrent/deildu/main.pyqˆ}q‰UDeildu.getLoginParamsh)qŠ}q‹hhhˆUDeildu‡†…hs}qŒ†bsU!/usr/lib64/python2.7/threading.py}q(UactiveCounth)q}q)hs}q†bURLockh)q‘}q’()hhU!/usr/lib64/python2.7/threading.pyU_RLock‡†hh†hu}q“†buU/usr/lib64/python2.7/urllib.py}q”Uquoteq•h)q–}q—h$h"†h&s}q˜†bsu.

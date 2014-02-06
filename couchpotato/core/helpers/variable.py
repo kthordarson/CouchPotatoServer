@@ -10,6 +10,7 @@ import re
 import string
 import sys
 import six
+
 from six.moves import map, zip, filter
 
 log = CPLog(__name__)
@@ -297,8 +298,5 @@ def dictIsSubset(a, b):
 def isSubFolder(sub_folder, base_folder):
     # Returns True if sub_folder is the same as or inside base_folder
     return base_folder and sub_folder and ss(os.path.normpath(base_folder).rstrip(os.path.sep) + os.path.sep) in ss(os.path.normpath(sub_folder).rstrip(os.path.sep) + os.path.sep)
-    except:
-        log.error('Error in isSubFolder %s %s', (sub_folder, base_folder))
-    return False
 #    return base_folder and sub_folder and os.path.normpath(base_folder).rstrip(os.path.sep) + os.path.sep in os.path.normpath(sub_folder).rstrip(os.path.sep) + os.path.sep
 

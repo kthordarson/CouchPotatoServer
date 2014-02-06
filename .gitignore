@@ -6,4 +6,5 @@
 *.bak
 .idea/*
 *.swp
+/couchpotato/core/.ropeproject/
 

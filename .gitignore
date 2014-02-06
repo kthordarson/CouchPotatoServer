@@ -7,4 +7,5 @@
 .idea/*
 *.swp
 /couchpotato/core/.ropeproject/
+*.orig
 

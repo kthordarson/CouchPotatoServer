@@ -67,7 +67,7 @@ class Provider(Plugin):
 
     def getJsonData(self, url, decode_from = None, **kwargs):
 
-        cache_key = '%s%s' % (md5(url), md5('%s' % kwargs.get('params', {})))
+        cache_key = md5(url)
         data = self.getCache(cache_key, url, **kwargs)
 
         if data:
@@ -85,7 +85,7 @@ class Provider(Plugin):
 
     def getRSSData(self, url, item_path = 'channel/item', **kwargs):
 
-        cache_key = '%s%s' % (md5(url), md5('%s' % kwargs.get('params', {})))
+        cache_key = md5(url)
         data = self.getCache(cache_key, url, **kwargs)
 
         if data and len(data) > 0:
@@ -99,7 +99,7 @@ class Provider(Plugin):
 
     def getHTMLData(self, url, **kwargs):
 
-        cache_key = '%s%s' % (md5(url), md5('%s' % kwargs.get('data', {})))
+        cache_key = md5(url)
         log.debug("getHTMLData - getCache %s ", url)
         return self.getCache(cache_key, url, **kwargs)
 
@@ -112,9 +112,9 @@ class YarrProvider(Provider):
     cat_ids = {}
     cat_backup_id = None
 
-    sizeGb = ['gb', 'gib']
-    sizeMb = ['mb', 'mib']
-    sizeKb = ['kb', 'kib']
+    size_gb = ['gb', 'gib']
+    size_mb = ['mb', 'mib']
+    size_kb = ['kb', 'kib']
 
     last_login_check = None
 
@@ -229,19 +229,19 @@ class YarrProvider(Provider):
 
     def parseSize(self, size):
 
-        sizeRaw = size.lower()
+        size_raw = size.lower()
         size = tryFloat(re.sub(r'[^0-9.]', '', size).strip())
 
-        for s in self.sizeGb:
-            if s in sizeRaw:
+        for s in self.size_gb:
+            if s in size_raw:
                 return size * 1024
 
-        for s in self.sizeMb:
-            if s in sizeRaw:
+        for s in self.size_mb:
+            if s in size_raw:
                 return size
 
-        for s in self.sizeKb:
-            if s in sizeRaw:
+        for s in self.size_kb:
+            if s in size_raw:
                 return size / 1024
 
         return 0
@@ -285,7 +285,7 @@ class ResultList(list):
         new_result = self.fillResult(result)
 
         is_correct = fireEvent('searcher.correct_release', new_result, self.media, self.quality,
-                                     imdb_results = self.kwargs.get('imdb_results', False), single = True)
+                               imdb_results = self.kwargs.get('imdb_results', False), single = True)
 
         if is_correct and new_result['id'] not in self.result_ids:
             is_correct_weight = float(is_correct)

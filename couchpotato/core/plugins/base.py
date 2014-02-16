@@ -111,7 +111,7 @@ class Plugin(object):
             f.write(content)
             f.close()
             os.chmod(path, Env.getPermission('file'))
-        except Exception as e:
+        except:
             log.error('Unable writing to file "%s": %s', (path, traceback.format_exc()))
             if os.path.isfile(path):
                 os.remove(path)
@@ -174,7 +174,10 @@ class Plugin(object):
 #            log.info('Opening url: %s %s, data ')
             response = r.request(method, url, verify = False, **kwargs)
 
-            data = response.content
+            if response.status_code == requests.codes.ok:
+                data = response.content
+            else:
+                response.raise_for_status()
 
             self.http_failed_request[host] = 0
         except (IOError, MaxRetryError, Timeout):

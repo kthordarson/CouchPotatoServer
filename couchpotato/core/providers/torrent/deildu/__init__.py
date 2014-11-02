@@ -12,7 +12,7 @@ config = [{
 #            'subtab': 'providers',
             'list': 'torrent_providers',
             'name': 'Deildu.net',
-            'description': 'See <a href="http://deildu.net">Deildu.net</a>',
+            'description': 'See <a href="http://iceland.pm">Deildu.net</a>',
             'wizard': True,
             'options': [
                 {

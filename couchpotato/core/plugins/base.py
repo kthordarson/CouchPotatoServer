@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
-=======
 import threading
 from urllib import quote
 from urlparse import urlparse
@@ -11,7 +9,6 @@ import re
 import time
 import traceback
 
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 from couchpotato.core.event import fireEvent, addEvent
 from couchpotato.core.helpers.encoding import ss, toSafeString, \
     toUnicode, sp
@@ -232,12 +229,12 @@ class Plugin(object):
             method = 'post' if len(data) > 0 or files else 'get'
 
             log.info('Opening url: %s %s, data: %s', (method, url, [x for x in data.keys()] if isinstance(data, dict) else 'with data'))
-<<<<<<< HEAD
+#<<<<<<< HEAD
 #            log.info('Opening url: %s %s, data ')
-            response = r.request(method, url, verify = False, **kwargs)
-=======
+#            response = r.request(method, url, verify = False, **kwargs)
+#=======
             response = r.request(method, url, **kwargs)
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
+#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 
             status_code = response.status_code
             if response.status_code == requests.codes.ok:

@@ -87,15 +87,15 @@ class Searcher(SearcherBase):
     def containsOtherQuality(self, nzb, movie_year = None, preferred_quality = None):
         if not preferred_quality: preferred_quality = {}
 
-<<<<<<< HEAD
+#<<<<<<< HEAD
         name = nzb['name']
         size = nzb.get('size', 0)
         nzb_words = re.split('[\W\-]+', simplifyString(name), flags=re.U)
 
         qualities = fireEvent('quality.all', single = True)
 
-=======
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
+#=======
+#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
         found = {}
 
         # Try guessing via quality tags

@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 from couchpotato.core.helpers.encoding import simplifyString, toSafeString, ss
 from couchpotato.core.logger import CPLog
-=======
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 import collections
 import ctypes
 import hashlib
@@ -302,12 +299,9 @@ def dictIsSubset(a, b):
 
 # Returns True if sub_folder is the same as or inside base_folder
 def isSubFolder(sub_folder, base_folder):
-<<<<<<< HEAD
     # Returns True if sub_folder is the same as or inside base_folder
     return base_folder and sub_folder and ss(os.path.normpath(base_folder).rstrip(os.path.sep) + os.path.sep) in ss(os.path.normpath(sub_folder).rstrip(os.path.sep) + os.path.sep)
 #    return base_folder and sub_folder and os.path.normpath(base_folder).rstrip(os.path.sep) + os.path.sep in os.path.normpath(sub_folder).rstrip(os.path.sep) + os.path.sep
-
-=======
     if base_folder and sub_folder:
         base = sp(os.path.realpath(base_folder)) + os.path.sep
         subfolder = sp(os.path.realpath(sub_folder)) + os.path.sep
@@ -424,4 +418,3 @@ def find(func, iterable):
             return item
 
     return None
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d

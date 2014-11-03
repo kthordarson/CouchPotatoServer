@@ -1,4 +1,3 @@
-<<<<<<< HEAD:couchpotato/core/providers/base.py
 # -*- coding: utf-8 -*-
 from couchpotato.core.event import addEvent, fireEvent
 from couchpotato.core.helpers.encoding import ss
@@ -7,8 +6,6 @@ from couchpotato.core.helpers.variable import tryFloat, mergeDicts, md5, \
 from couchpotato.core.logger import CPLog
 from couchpotato.core.plugins.base import Plugin
 from couchpotato.environment import Env
-=======
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d:couchpotato/core/media/_base/providers/base.py
 from urlparse import urlparse
 import json
 import re

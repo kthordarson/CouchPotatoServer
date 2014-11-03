@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 from axl.axel import Event
-from couchpotato.core.helpers.variable import mergeDicts, natcmp
+#from couchpotato.core.helpers.variable import mergeDicts, natcmp
 from couchpotato.core.logger import CPLog
-=======
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 import threading
 import traceback
 

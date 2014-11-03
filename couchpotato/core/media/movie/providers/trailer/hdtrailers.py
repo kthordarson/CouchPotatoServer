@@ -1,12 +1,9 @@
-<<<<<<< HEAD:couchpotato/core/providers/trailer/hdtrailers/main.py
 from bs4 import BeautifulSoup
 from BeautifulSoup import SoupStrainer
-=======
 from string import digits, ascii_letters
 import re
 
 from bs4 import SoupStrainer, BeautifulSoup
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d:couchpotato/core/media/movie/providers/trailer/hdtrailers.py
 from couchpotato.core.helpers.encoding import tryUrlencode
 from couchpotato.core.helpers.variable import mergeDicts, getTitle, getIdentifier
 from couchpotato.core.logger import CPLog

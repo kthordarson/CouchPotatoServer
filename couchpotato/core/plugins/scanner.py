@@ -1,7 +1,5 @@
-<<<<<<< HEAD:couchpotato/core/plugins/scanner/main.py
 # -*- coding: utf-8 -*-
 from couchpotato import get_session
-=======
 import os
 import re
 import threading
@@ -9,7 +7,6 @@ import time
 import traceback
 
 from couchpotato import get_db
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d:couchpotato/core/plugins/scanner.py
 from couchpotato.core.event import fireEvent, addEvent
 from couchpotato.core.helpers.encoding import toUnicode, simplifyString, sp, ss
 from couchpotato.core.helpers.variable import getExt, getImdb, tryInt, \
@@ -931,12 +928,9 @@ class Scanner(Plugin):
                 log.debug('Could not detect via guessit "%s": %s', (file_name, traceback.format_exc()))
 
         # Backup to simple
-<<<<<<< HEAD:couchpotato/core/plugins/scanner/main.py
         cleaned = ' '.join(re.split('[\W\-]+', simplifyString(release_name), flags=re.U))
-=======
         release_name = os.path.basename(release_name.replace('\\', '/'))
         cleaned = ' '.join(re.split('\W+', simplifyString(release_name)))
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d:couchpotato/core/plugins/scanner.py
         cleaned = re.sub(self.clean, ' ', cleaned)
 
         year = None

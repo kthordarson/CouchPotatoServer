@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 from couchpotato.core.logger import CPLog
-=======
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 from string import ascii_letters, digits
 from urllib import quote_plus
 import os
@@ -62,16 +59,12 @@ def ss(original, *args):
         from couchpotato.environment import Env
         return u_original.encode(Env.get('encoding'))
     except Exception as e:
-<<<<<<< HEAD
             log.debug('Failed ss encoding char, force UTF8: %s', e)
             return u_original.encode('utf8')
-=======
-        log.debug('Failed ss encoding char, force UTF8: %s', e)
-        try:
+    try:
             return u_original.encode(Env.get('encoding'), 'replace')
-        except:
+    except:
             return u_original.encode('utf-8', 'replace')
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 
 
 def sp(path, *args):

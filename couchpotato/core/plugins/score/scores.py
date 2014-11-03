@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
-# coding=utf-8
-=======
 import re
 import traceback
 
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 from couchpotato.core.event import fireEvent
 from couchpotato.core.helpers.encoding import simplifyString
 from couchpotato.core.helpers.variable import tryInt
@@ -53,15 +49,13 @@ def nameScore(name, year, preferred_words):
         if str(year) in name:
             score += 5
 
-<<<<<<< HEAD
     # Contains preferred word
-    nzb_words = re.split('[\W\-]+', simplifyString(name), flags=re.U)
-    score += 100 * len(list(set(nzb_words) & set(preferred_words)))
-=======
+#    nzb_words = re.split('[\W\-]+', simplifyString(name), flags=re.U)
+#    score += 100 * len(list(set(nzb_words) & set(preferred_words)))
         # Contains preferred word
         nzb_words = re.split('\W+', simplifyString(name))
         score += 100 * len(list(set(nzb_words) & set(preferred_words)))
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
+#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 
         return score
     except:
@@ -71,14 +65,14 @@ def nameScore(name, year, preferred_words):
 
 
 def nameRatioScore(nzb_name, movie_name):
-<<<<<<< HEAD
-    nzb_words = re.split('[\W\-]+', fireEvent('scanner.create_file_identifier', nzb_name, single = True), flags=re.U)
-    movie_words = re.split('[\W\-]+', simplifyString(movie_name), flags=re.U)
-=======
+#<<<<<<< HEAD
+#    nzb_words = re.split('[\W\-]+', fireEvent('scanner.create_file_identifier', nzb_name, single = True), flags=re.U)
+#    movie_words = re.split('[\W\-]+', simplifyString(movie_name), flags=re.U)
+#=======
     try:
         nzb_words = re.split('\W+', fireEvent('scanner.create_file_identifier', nzb_name, single = True))
         movie_words = re.split('\W+', simplifyString(movie_name))
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
+#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 
         left_over = set(nzb_words) - set(movie_words)
         return 10 - len(left_over)
@@ -160,17 +154,17 @@ def providerScore(provider):
 
 def duplicateScore(nzb_name, movie_name):
 
-<<<<<<< HEAD
-    nzb_words = re.split('[\W\-]+', simplifyString(nzb_name), flags=re.U)
-    movie_words = re.split('[\W\-]+', simplifyString(movie_name), flags=re.U)
-=======
+#<<<<<<< HEAD
+#    nzb_words = re.split('[\W\-]+', simplifyString(nzb_name), flags=re.U)
+#    movie_words = re.split('[\W\-]+', simplifyString(movie_name), flags=re.U)
+#=======
     try:
         nzb_words = re.split('\W+', simplifyString(nzb_name))
         movie_words = re.split('\W+', simplifyString(movie_name))
 
         # minus for duplicates
         duplicates = [x for i, x in enumerate(nzb_words) if nzb_words[i:].count(x) > 1]
->>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
+#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 
         return len(list(set(duplicates) - set(movie_words))) * -4
     except:

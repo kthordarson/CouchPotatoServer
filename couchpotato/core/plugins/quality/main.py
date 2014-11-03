@@ -23,19 +23,6 @@ class QualityPlugin(Plugin):
     }
 
     qualities = [
-#<<<<<<< HEAD
-#        {'identifier': 'bd50', 'hd': True, 'size': (15000, 60000), 'label': 'BR-Disk', 'alternative': ['bd25', 'isltexti'], 'allow': ['1080p', 'isltexti'], 'ext':[], 'tags': ['bdmv', 'certificate', ('complete', 'bluray')]},
-#        {'identifier': '1080p', 'hd': True, 'size': (4000, 20000), 'label': '1080p', 'width': 1920, 'height': 1080, 'alternative': ['isltexti'], 'allow': ['isltexti'], 'ext':['mkv', 'm2ts'], 'tags': ['m2ts']},
-#        {'identifier': '720p', 'hd': True, 'size': (3000, 10000), 'label': '720p', 'width': 1280, 'height': 720, 'alternative': ['isltexti'], 'allow': ['isltexti'], 'ext':['mkv', 'ts']},
-        {'identifier': 'isltexti', 'hd': True, 'size': (600, 6000), 'label': 'isltexti', 'alternative': ['txt', 'texti', 'texta', 'isl', '0xEDsl', '0xEDslenskum', 'islenskum', 'islenskur', '0xEDslenskur'], 'allow': [], 'ext':['mkv', 'avi'], 'tags': ['texti', 'texta', 'Texta', 'isl', '0xEDsl', '0xCDsl', '0xEDslenskum', '0xCDslenskum', 'Texti', 'eskil']},
-#        {'identifier': 'brrip', 'hd': True, 'size': (700, 7000), 'label': 'BR-Rip', 'alternative': ['bdrip', 'isltexti'], 'allow': ['720p', '1080p', 'isltexti'], 'ext':['avi'], 'tags': ['hdtv', 'hdrip', 'webdl', ('web', 'dl')]},
-#        {'identifier': 'dvdr', 'size': (3000, 10000), 'label': 'DVD-R', 'alternative': ['isltexti'], 'allow': ['isltexti'], 'ext':['iso', 'img'], 'tags': ['pal', 'ntsc', 'video_ts', 'audio_ts']},
-        {'identifier': 'dvd', 'size': (3000, 10000), 'label': 'DVD', 'alternative': ['isltexti'], 'allow': ['isltexti', 'dvd'], 'ext':['iso', 'img'], 'tags': ['pal', 'ntsc', 'video_ts', 'audio_ts']},
-#        {'identifier': 'dvdrip', 'size': (600, 2400), 'label': 'DVD-Rip', 'width': 720, 'alternative': ['isltexti'], 'allow': ['isltexti'], 'ext':['avi', 'mpg', 'mpeg'], 'tags': [('dvd', 'rip'), ('dvd', 'xvid'), ('dvd', 'divx')]},
-#        {'identifier': 'scr', 'size': (600, 1600), 'label': 'Screener', 'alternative': ['screener', 'dvdscr', 'ppvrip', 'dvdscreener', 'hdscr'], 'allow': ['dvdr', 'dvd', 'dvdrip'], 'ext':['avi', 'mpg', 'mpeg'], 'tags': ['webrip', ('web', 'rip')]},
-#        {'identifier': 'ts', 'size': (600, 1000), 'label': 'TeleSync', 'alternative': ['telesync', 'hdts'], 'allow': [], 'ext':[]},
-#        {'identifier': 'cam', 'size': (600, 1000), 'label': 'Cam', 'alternative': ['camrip', 'hdcam'], 'allow': [], 'ext':[]}
-#=======
         {'identifier': 'bd50', 'hd': True, 'allow_3d': True, 'size': (20000, 60000), 'median_size': 40000, 'label': 'BR-Disk', 'alternative': ['bd25', ('br', 'disk')], 'allow': ['1080p'], 'ext':['iso', 'img'], 'tags': ['bdmv', 'certificate', ('complete', 'bluray'), 'avc', 'mvc']},
         {'identifier': '1080p', 'hd': True, 'allow_3d': True, 'size': (4000, 20000), 'median_size': 10000, 'label': '1080p', 'width': 1920, 'height': 1080, 'alternative': [], 'allow': [], 'ext':['mkv', 'm2ts', 'ts'], 'tags': ['m2ts', 'x264', 'h264']},
         {'identifier': '720p', 'hd': True, 'allow_3d': True, 'size': (3000, 10000), 'median_size': 5500, 'label': '720p', 'width': 1280, 'height': 720, 'alternative': [], 'allow': [], 'ext':['mkv', 'ts'], 'tags': ['x264', 'h264']},
@@ -47,7 +34,6 @@ class QualityPlugin(Plugin):
         {'identifier': 'tc', 'size': (600, 1000), 'median_size': 700, 'label': 'TeleCine', 'alternative': ['telecine'], 'allow': ['720p', '1080p'], 'ext':[]},
         {'identifier': 'ts', 'size': (600, 1000), 'median_size': 700, 'label': 'TeleSync', 'alternative': ['telesync', 'hdts'], 'allow': ['720p', '1080p'], 'ext':[]},
         {'identifier': 'cam', 'size': (600, 1000), 'median_size': 700, 'label': 'Cam', 'alternative': ['camrip', 'hdcam'], 'allow': ['720p', '1080p'], 'ext':[]}
-#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
     ]
     pre_releases = ['cam', 'ts', 'tc', 'r5', 'scr']
     threed_tags = {
@@ -70,7 +56,7 @@ class QualityPlugin(Plugin):
         addEvent('quality.fill', self.fill)
 
         addApiView('quality.size.save', self.saveSize)
-        addApiView('quality.list', self.allView, docs={
+        addApiView('quality.list', self.allView, docs = {
             'desc': 'List all available qualities',
             'return': {'type': 'object', 'example': """{
             'success': True,
@@ -78,8 +64,7 @@ class QualityPlugin(Plugin):
 }"""}
         })
 
-        addEvent('app.initialize', self.fill, priority=10)
-        addEvent('app.test', self.doTest)
+        addEvent('app.initialize', self.fill, priority = 10)
 
         addEvent('app.test', self.doTest)
 
@@ -122,7 +107,7 @@ class QualityPlugin(Plugin):
 
         return temp
 
-    def single(self, identifier=''):
+    def single(self, identifier = ''):
 
         db = get_db()
         quality_dict = {}
@@ -208,21 +193,11 @@ class QualityPlugin(Plugin):
 
         # Create hash for cache
         cache_key = str([f.replace('.' + getExt(f), '') if len(getExt(f)) < 4 else f for f in files])
-#<<<<<<< HEAD
-#        cached = self.getCache(cache_key)
-#        if cached and len(extra) == 0: return cached
-        # Create hash for cache
-        cache_key = str([f.replace('.' + getExt(f), '') if len(getExt(f)) < 4 else f for f in files])
-        cached = self.getCache(cache_key)
-        if cached and len(extra) == 0:
-            return cached
-#=======
         if use_cache:
             cached = self.getCache(cache_key)
             if cached and len(extra) == 0:
                 return cached
 
-#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
         qualities = self.all()
 
         # Start with 0
@@ -238,16 +213,12 @@ class QualityPlugin(Plugin):
             files.extend(extra.get('titles'))
 
         for cur_file in files:
-#<<<<<<< HEAD
-#            words = re.split('[\W\-]+', cur_file.lower(), flags=re.U)
-#=======
             words = re.split('\W+', cur_file.lower())
             name_year = fireEvent('scanner.name_year', cur_file, file_name = cur_file, single = True)
             threed_words = words
             if name_year and name_year.get('name'):
                 split_name = splitString(name_year.get('name'), ' ')
                 threed_words = [x for x in words if x not in split_name]
-#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 
             for quality in qualities:
                 contains_score = self.containsTagScore(quality, words, cur_file)
@@ -329,15 +300,9 @@ class QualityPlugin(Plugin):
 
         # Check extention
         for ext in quality.get('ext', []):
-#<<<<<<< HEAD
-#            if ext == words[-1]:
-#                log.debug('Found %s extension in %s', (ext, cur_file))
-#=======
             if ext == extension:
                 log.debug('Found %s with .%s extension in %s', (quality['identifier'], ext, cur_file))
-#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
                 score += points['ext']
-
 
         return score
 
@@ -427,13 +392,6 @@ class QualityPlugin(Plugin):
 
         if penalty and add_score != 0:
             for allow in quality.get('allow', []):
-#<<<<<<< HEAD
-                try:
-                    score[allow] -= 40 if self.cached_order[allow] < self.cached_order[quality['identifier']] else 5
-                except:
-                    log.debug('sma vesen')
-#                    score[allow] -= 10
-#=======
                 score[allow]['score'] -= ((penalty * 2) if self.cached_order[allow] < self.cached_order[quality['identifier']] else penalty) * 2
 
             # Give panelty for all other qualities
@@ -483,9 +441,9 @@ class QualityPlugin(Plugin):
             return 'equal'
         else:
             return 'higher'
-#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 
     def doTest(self):
+
         tests = {
             'Movie Name (1999)-DVD-Rip.avi': {'size': 700, 'quality': 'dvdrip'},
             'Movie Name 1999 720p Bluray.mkv': {'size': 4200, 'quality': '720p'},
@@ -534,20 +492,12 @@ class QualityPlugin(Plugin):
             'Movie Name.2014.720p.WEBRip.x264.AC3-ReleaseGroup': {'size': 3000, 'quality': 'scr'},
             'Movie.Name.2014.1080p.HDCAM.-.ReleaseGroup': {'size': 5300, 'quality': 'cam'},
         }
+
         correct = 0
         for name in tests:
             test_quality = self.guess(files = [name], extra = tests[name].get('extra', None), size = tests[name].get('size', None), use_cache = False) or {}
             success = test_quality.get('identifier') == tests[name]['quality'] and test_quality.get('is_3d') == tests[name].get('is_3d', False)
             if not success:
-#<<<<<<< HEAD
-                log.error('%s failed check, thinks it\'s %s', (name, self.guess([name]).get('identifier')))
-                correct += success
-            if correct == len(tests):
-                log.info('Quality test successful')
-                return True
-            else:
-                log.error('Quality test failed: %s out of %s succeeded', (correct, len(tests)))
-#=======
                 log.error('%s failed check, thinks it\'s "%s" expecting "%s"', (name,
                                                                             test_quality.get('identifier') + (' 3D' if test_quality.get('is_3d') else ''),
                                                                             tests[name]['quality'] + (' 3D' if tests[name].get('is_3d') else '')
@@ -560,6 +510,5 @@ class QualityPlugin(Plugin):
             return True
         else:
             log.error('Quality test failed: %s out of %s succeeded', (correct, len(tests)))
-#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 
 

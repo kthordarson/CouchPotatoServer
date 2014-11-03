@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from couchpotato import get_session
+#from couchpotato import get_session
 import os
 import re
 import threading

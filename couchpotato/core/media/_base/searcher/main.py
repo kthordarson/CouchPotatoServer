@@ -87,15 +87,6 @@ class Searcher(SearcherBase):
     def containsOtherQuality(self, nzb, movie_year = None, preferred_quality = None):
         if not preferred_quality: preferred_quality = {}
 
-#<<<<<<< HEAD
-        name = nzb['name']
-        size = nzb.get('size', 0)
-        nzb_words = re.split('[\W\-]+', simplifyString(name), flags=re.U)
-
-        qualities = fireEvent('quality.all', single = True)
-
-#=======
-#>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
         found = {}
 
         # Try guessing via quality tags
@@ -164,7 +155,7 @@ class Searcher(SearcherBase):
     def correctName(self, check_name, movie_name):
 
         check_names = [check_name]
-        log.debug('Running corectname check...')
+
         # Match names between "
         try: check_names.append(re.search(r'([\'"])[^\1]*\1', check_name).group(0))
         except: pass

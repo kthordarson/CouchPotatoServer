@@ -180,7 +180,7 @@ with ``{# ... #}``.
 ``{% set *x* = *y* %}``
     Sets a local variable.
 
-``{% try %}...{% except %}...{% finally %}...{% else %}...{% end %}``
+``{% try %}...{% except %}...{% else %}...{% finally %}...{% end %}``
     Same as the python ``try`` statement.
 
 ``{% while *condition* %}... {% end %}``
@@ -199,7 +199,7 @@ import threading
 
 from tornado import escape
 from tornado.log import app_log
-from tornado.util import bytes_type, ObjectDict, exec_in, unicode_type
+from tornado.util import ObjectDict, exec_in, unicode_type
 
 try:
     from cStringIO import StringIO  # py2
@@ -261,7 +261,7 @@ class Template(object):
             "linkify": escape.linkify,
             "datetime": datetime,
             "_tt_utf8": escape.utf8,  # for internal use
-            "_tt_string_types": (unicode_type, bytes_type),
+            "_tt_string_types": (unicode_type, bytes),
             # __name__ and __loader__ allow the traceback mechanism to find
             # the generated source code.
             "__name__": self.name.replace('.', '_'),
@@ -367,10 +367,9 @@ class Loader(BaseLoader):
 
     def _create_template(self, name):
         path = os.path.join(self.root, name)
-        f = open(path, "rb")
-        template = Template(f.read(), name=name, loader=self)
-        f.close()
-        return template
+        with open(path, "rb") as f:
+            template = Template(f.read(), name=name, loader=self)
+            return template
 
 
 class DictLoader(BaseLoader):
@@ -785,7 +784,7 @@ def _parse(reader, template, in_block=None, in_loop=None):
         if allowed_parents is not None:
             if not in_block:
                 raise ParseError("%s outside %s block" %
-                                (operator, allowed_parents))
+                                 (operator, allowed_parents))
             if in_block not in allowed_parents:
                 raise ParseError("%s block cannot be attached to %s block" % (operator, in_block))
             body.chunks.append(_IntermediateControlBlock(contents, line))

@@ -1,20 +1,24 @@
+import datetime
+import re
+
 from couchpotato.api import addApiView
 from couchpotato.core.event import addEvent, fireEvent
 from couchpotato.core.helpers.encoding import simplifyString
 from couchpotato.core.helpers.variable import splitString, removeEmpty, removeDuplicate
 from couchpotato.core.logger import CPLog
 from couchpotato.core.media._base.searcher.base import SearcherBase
-import datetime
-import re
+
 
 log = CPLog(__name__)
 
 
 class Searcher(SearcherBase):
 
+    # noinspection PyMissingConstructor
     def __init__(self):
         addEvent('searcher.protocols', self.getSearchProtocols)
         addEvent('searcher.contains_other_quality', self.containsOtherQuality)
+        addEvent('searcher.correct_3d', self.correct3D)
         addEvent('searcher.correct_year', self.correctYear)
         addEvent('searcher.correct_name', self.correctName)
         addEvent('searcher.correct_words', self.correctWords)
@@ -48,7 +52,7 @@ class Searcher(SearcherBase):
         results = []
 
         for search_protocol in protocols:
-            protocol_results = fireEvent('provider.search.%s.%s' % (search_protocol, media['type']), media, quality, merge = True)
+            protocol_results = fireEvent('provider.search.%s.%s' % (search_protocol, media.get('type')), media, quality, merge = True)
             if protocol_results:
                 results += protocol_results
 
@@ -83,31 +87,32 @@ class Searcher(SearcherBase):
     def containsOtherQuality(self, nzb, movie_year = None, preferred_quality = None):
         if not preferred_quality: preferred_quality = {}
 
+<<<<<<< HEAD
         name = nzb['name']
         size = nzb.get('size', 0)
         nzb_words = re.split('[\W\-]+', simplifyString(name), flags=re.U)
 
         qualities = fireEvent('quality.all', single = True)
 
+=======
+>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
         found = {}
-        for quality in qualities:
-            # Main in words
-            if quality['identifier'] in nzb_words:
-                found[quality['identifier']] = True
-
-            # Alt in words
-            if list(set(nzb_words) & set(quality['alternative'])):
-                found[quality['identifier']] = True
 
         # Try guessing via quality tags
-        guess = fireEvent('quality.guess', [nzb.get('name')], single = True)
+        guess = fireEvent('quality.guess', files = [nzb.get('name')], size = nzb.get('size', None), single = True)
         if guess:
             found[guess['identifier']] = True
 
         # Hack for older movies that don't contain quality tag
+        name = nzb['name']
+        size = nzb.get('size', 0)
+
         year_name = fireEvent('scanner.name_year', name, single = True)
         if len(found) == 0 and movie_year < datetime.datetime.now().year - 3 and not year_name.get('year', None):
-            if size > 3000:  # Assume dvdr
+            if size > 20000:  # Assume bd50
+                log.info('Quality was missing in name, assuming it\'s a BR-Disk based on the size: %s', size)
+                found['bd50'] = True
+            elif size > 3000:  # Assume dvdr
                 log.info('Quality was missing in name, assuming it\'s a DVD-R based on the size: %s', size)
                 found['dvdr'] = True
             else:  # Assume dvdrip
@@ -119,7 +124,25 @@ class Searcher(SearcherBase):
             if found.get(allowed):
                 del found[allowed]
 
-        return not (found.get(preferred_quality['identifier']) and len(found) == 1)
+        if found.get(preferred_quality['identifier']) and len(found) == 1:
+            return False
+
+        return found
+
+    def correct3D(self, nzb, preferred_quality = None):
+        if not preferred_quality: preferred_quality = {}
+        if not preferred_quality.get('custom'): return
+
+        threed = preferred_quality['custom'].get('3d')
+
+        # Try guessing via quality tags
+        guess = fireEvent('quality.guess', [nzb.get('name')], single = True)
+
+        if guess:
+            return threed == guess.get('is_3d')
+        # If no quality guess, assume not 3d
+        else:
+            return threed == False
 
     def correctYear(self, haystack, year, year_range):
 
@@ -164,6 +187,25 @@ class Searcher(SearcherBase):
 
         return False
 
+    def containsWords(self, rel_name, rel_words, conf, media):
+
+        # Make sure it has required words
+        words = splitString(self.conf('%s_words' % conf, section = 'searcher').lower())
+        try: words = removeDuplicate(words + splitString(media['category'][conf].lower()))
+        except: pass
+
+        req_match = 0
+        for req_set in words:
+            if len(req_set) >= 2 and (req_set[:1] + req_set[-1:]) == '//':
+                if re.search(req_set[1:-1], rel_name):
+                    log.debug('Regex match: %s', req_set[1:-1])
+                    req_match += 1
+            else:
+                req = splitString(req_set, '&')
+                req_match += len(list(set(rel_words) & set(req))) == len(req)
+
+        return words, req_match > 0
+
     def correctWords(self, rel_name, media):
         media_title = fireEvent('searcher.get_search_title', media, single = True)
         media_words = re.split('\W+', simplifyString(media_title))
@@ -171,31 +213,13 @@ class Searcher(SearcherBase):
         rel_name = simplifyString(rel_name)
         rel_words = re.split('\W+', rel_name)
 
-        # Make sure it has required words
-        required_words = splitString(self.conf('required_words', section = 'searcher').lower())
-        try: required_words = removeDuplicate(required_words + splitString(media['category']['required'].lower()))
-        except: pass
-
-        req_match = 0
-        for req_set in required_words:
-            req = splitString(req_set, '&')
-            req_match += len(list(set(rel_words) & set(req))) == len(req)
-
-        if len(required_words) > 0  and req_match == 0:
+        required_words, contains_required = self.containsWords(rel_name, rel_words, 'required', media)
+        if len(required_words) > 0 and not contains_required:
             log.info2('Wrong: Required word missing: %s', rel_name)
             return False
 
-        # Ignore releases
-        ignored_words = splitString(self.conf('ignored_words', section = 'searcher').lower())
-        try: ignored_words = removeDuplicate(ignored_words + splitString(media['category']['ignored'].lower()))
-        except: pass
-
-        ignored_match = 0
-        for ignored_set in ignored_words:
-            ignored = splitString(ignored_set, '&')
-            ignored_match += len(list(set(rel_words) & set(ignored))) == len(ignored)
-
-        if len(ignored_words) > 0 and ignored_match:
+        ignored_words, contains_ignored = self.containsWords(rel_name, rel_words, 'ignored', media)
+        if len(ignored_words) > 0 and contains_ignored:
             log.info2("Wrong: '%s' contains 'ignored words'", rel_name)
             return False
 

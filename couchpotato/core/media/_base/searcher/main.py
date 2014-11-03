@@ -141,7 +141,7 @@ class Searcher(SearcherBase):
     def correctName(self, check_name, movie_name):
 
         check_names = [check_name]
-
+        log.debug('Running corectname check...')
         # Match names between "
         try: check_names.append(re.search(r'([\'"])[^\1]*\1', check_name).group(0))
         except: pass

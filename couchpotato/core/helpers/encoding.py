@@ -19,6 +19,7 @@ def toSafeString(original):
 
 
 def simplifyString(original):
+    string = original.replace("'", " ")
     string = stripAccents(original.lower())
     string = toSafeString(' '.join(re.split('[\W\-]+', string, flags=re.U)))
     split = re.split('[\W\-]+|_', string.lower(), flags=re.U)

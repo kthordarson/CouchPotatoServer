@@ -263,10 +263,11 @@ class MovieSearcher(SearcherBase, MovieTypeBase):
             return True
 
         for raw_title in media['library']['titles']:
+            log.info("Now running raw_title check")
             for movie_title in possibleTitles(raw_title['title']):
                 movie_words = re.split('\W+', simplifyString(movie_title))
 
-                if fireEvent('searcher.correct_name', nzb['name'], movie_title, single = True):
+                if fireEvent('searcher.correct_name', nzb['name'], media_title, single = True):
                     # if no IMDB link, at least check year range 1
                     if len(movie_words) > 2 and fireEvent('searcher.correct_year', nzb['name'], media['library']['year'], 1, single = True):
                         return True

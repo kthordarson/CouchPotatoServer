@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 from axl.axel import Event
 from couchpotato.core.helpers.variable import mergeDicts, natcmp
 from couchpotato.core.logger import CPLog
+=======
+>>>>>>> a12f049d14cfc34965a7a3b9523d76dc7279182d
 import threading
 import traceback
+
+from axl.axel import Event
+from couchpotato.core.helpers.variable import mergeDicts, natsortKey
+from couchpotato.core.logger import CPLog
+
 
 log = CPLog(__name__)
 events = {}
@@ -52,11 +60,6 @@ def addEvent(name, handler, priority = 100):
     })
 
 
-def removeEvent(name, handler):
-    e = events[name]
-    e -= handler
-
-
 def fireEvent(name, *args, **kwargs):
     if name not in events: return
 
@@ -94,7 +97,7 @@ def fireEvent(name, *args, **kwargs):
 
         else:
 
-            e = Event(name = name, threads = 10, exc_info = True, traceback = True, lock = threading.RLock())
+            e = Event(name = name, threads = 10, exc_info = True, traceback = True)
 
             for event in events[name]:
                 e.handle(event['handler'], priority = event['priority'])
@@ -107,7 +110,7 @@ def fireEvent(name, *args, **kwargs):
             result = e(*args, **kwargs)
 
         result_keys = result.keys()
-        result_keys.sort(natcmp)
+        result_keys.sort(key = natsortKey)
 
         if options['single'] and not options['merge']:
             results = None

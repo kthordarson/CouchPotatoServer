@@ -2,6 +2,8 @@ var SuggestList = new Class({
 
 	Implements: [Options, Events],
 
+	shown_once: false,
+
 	initialize: function(options){
 		var self = this;
 		self.setOptions(options);
@@ -42,15 +44,15 @@ var SuggestList = new Class({
 
 				}
 			}
-		}).grab(
-			new Element('h2', {
-				'text': 'You might like these'
-			})
-		);
-
-		self.api_request = Api.request('suggestion.view', {
-			'onComplete': self.fill.bind(self)
 		});
+
+        var cookie_menu_select = Cookie.read('suggestions_charts_menu_selected') || 'suggestions';
+        if( cookie_menu_select === 'suggestions')
+			self.show();
+		else
+			self.hide();
+
+		self.fireEvent('created');
 
 	},
 
@@ -101,7 +103,7 @@ var SuggestList = new Class({
 
 					// Add rating
 					m.info_container.adopt(
-						m.rating = m.info.rating && m.info.rating.imdb.length == 2 && parseFloat(m.info.rating.imdb[0]) > 0  ? new Element('span.rating', {
+						m.rating = m.info.rating && m.info.rating.imdb && m.info.rating.imdb.length == 2 && parseFloat(m.info.rating.imdb[0]) > 0  ? new Element('span.rating', {
 							'text': parseFloat(m.info.rating.imdb[0]),
 							'title': parseInt(m.info.rating.imdb[1]) + ' votes'
 						}) : null,
@@ -116,7 +118,7 @@ var SuggestList = new Class({
 								}
 							}
 						}) : null
-					)
+					);
 
 				$(m).inject(self.el);
 
@@ -146,8 +148,26 @@ var SuggestList = new Class({
 
 	},
 
+	show: function(){
+		var self = this;
+
+		self.el.show();
+
+		if(!self.shown_once){
+			self.api_request = Api.request('suggestion.view', {
+				'onComplete': self.fill.bind(self)
+			});
+
+			self.shown_once = true;
+		}
+	},
+
+	hide: function(){
+		this.el.hide();
+	},
+
 	toElement: function(){
 		return this.el;
 	}
 
-})
+});

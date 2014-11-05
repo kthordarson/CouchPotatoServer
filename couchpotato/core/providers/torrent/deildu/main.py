@@ -12,11 +12,11 @@ log = CPLog(__name__)
 class Deildu(TorrentProvider):
 
     urls = {
-        'test': 'http://iceland.pm/',
-        'login': 'http://iceland.pm/takelogin.php',
-        'detail': 'http://iceland.pm/details.php?id=%s',
-        'search': 'http://iceland.pm/browse.php?sort=seeders&type=desc&cat=0',
-        'base': 'http://iceland.pm/',
+        'test': 'http://icetracker.org/',
+        'login': 'http://icetracker.org/takelogin.php',
+        'detail': 'http://icetracker.org/details.php?id=%s',
+        'search': 'http://icetracker.org/browse.php?sort=seeders&type=desc&cat=0',
+        'base': 'http://icetracker.org/',
     }
 
     http_time_between_calls = 5  # seconds

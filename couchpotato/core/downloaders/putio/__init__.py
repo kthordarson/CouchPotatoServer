@@ -29,8 +29,13 @@ config = [{
                     'advanced': True,
                 },
                 {
+                    'name': 'folder',
+                    'description': ('The folder on putio where you want the upload to go','Must be a folder in the root directory'),
+                    'default': 0,
+                },
+                {
                     'name': 'callback_host',
-                    'description': 'This is used to generate the callback url',
+                    'description': 'External reachable url to CP so put.io can do it\'s thing',
                 },
                 {
                     'name': 'download',
@@ -40,7 +45,7 @@ config = [{
                 },
                 {
                     'name': 'delete_file',
-                    'description': 'Set this to remove the file from putio after sucessful download  Note: does nothing if you don\'t select download',
+                    'description': ('Set this to remove the file from putio after sucessful download','Does nothing if you don\'t select download'),
                     'type': 'bool',
                     'default': 0,
                 },

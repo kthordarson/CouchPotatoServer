@@ -1,10 +1,10 @@
 import traceback
 
 from bs4 import BeautifulSoup
-from couchpotato.core.helpers.encoding import tryUrlencode, toUnicode
 from couchpotato.core.helpers.variable import tryInt
 from couchpotato.core.logger import CPLog
 from couchpotato.core.media._base.providers.torrent.base import TorrentProvider
+import six
 
 
 log = CPLog(__name__)
@@ -13,59 +13,47 @@ log = CPLog(__name__)
 class Base(TorrentProvider):
 
     urls = {
-        'test': 'https://www.torrentbytes.net/',
-        'login': 'https://www.torrentbytes.net/takelogin.php',
-        'login_check': 'https://www.torrentbytes.net/inbox.php',
-        'detail': 'https://www.torrentbytes.net/details.php?id=%s',
-        'search': 'https://www.torrentbytes.net/browse.php?search=%s&cat=%d',
-        'download': 'https://www.torrentbytes.net/download.php?id=%s&name=%s',
+        'test': 'https://www.torrentleech.org/',
+        'login': 'https://www.torrentleech.org/user/account/login/',
+        'login_check': 'https://torrentleech.org/user/messages',
+        'detail': 'https://www.torrentleech.org/torrent/%s',
+        'search': 'https://www.torrentleech.org/torrents/browse/index/query/%s/categories/%d',
+        'download': 'https://www.torrentleech.org%s',
     }
-
-    cat_ids = [
-        ([5], ['720p', '1080p', 'bd50']),
-        ([19], ['cam']),
-        ([19], ['ts', 'tc']),
-        ([19], ['r5', 'scr']),
-        ([19], ['dvdrip']),
-        ([19], ['brrip']),
-        ([20], ['dvdr']),
-    ]
 
     http_time_between_calls = 1  # Seconds
     cat_backup_id = None
 
-    def _searchOnTitle(self, title, movie, quality, results):
+    def _searchOnTitle(self, title, media, quality, results):
 
-        url = self.urls['search'] % (tryUrlencode('%s %s' % (title.replace(':', ''), movie['info']['year'])), self.getCatId(quality)[0])
+        url = self.urls['search'] % self.buildUrl(title, media, quality)
+
         data = self.getHTMLData(url)
 
         if data:
             html = BeautifulSoup(data)
 
             try:
-                result_table = html.find('table', attrs = {'border': '1'})
+                result_table = html.find('table', attrs = {'id': 'torrenttable'})
                 if not result_table:
                     return
 
                 entries = result_table.find_all('tr')
 
                 for result in entries[1:]:
-                    cells = result.find_all('td')
 
-                    link = cells[1].find('a', attrs = {'class': 'index'})
-
-                    full_id = link['href'].replace('details.php?id=', '')
-                    torrent_id = full_id[:6]
-                    name = toUnicode(link.contents[0].encode('ISO-8859-1')).strip()
+                    link = result.find('td', attrs = {'class': 'name'}).find('a')
+                    url = result.find('td', attrs = {'class': 'quickdownload'}).find('a')
+                    details = result.find('td', attrs = {'class': 'name'}).find('a')
 
                     results.append({
-                        'id': torrent_id,
-                        'name': name,
-                        'url': self.urls['download'] % (torrent_id, name),
-                        'detail_url': self.urls['detail'] % torrent_id,
-                        'size': self.parseSize(cells[6].contents[0] + cells[6].contents[2]),
-                        'seeders': tryInt(cells[8].find('span').contents[0]),
-                        'leechers': tryInt(cells[9].find('span').contents[0]),
+                        'id': link['href'].replace('/torrent/', ''),
+                        'name': six.text_type(link.string),
+                        'url': self.urls['download'] % url['href'],
+                        'detail_url': self.urls['download'] % details['href'],
+                        'size': self.parseSize(result.find_all('td')[4].string),
+                        'seeders': tryInt(result.find('td', attrs = {'class': 'seeders'}).string),
+                        'leechers': tryInt(result.find('td', attrs = {'class': 'leechers'}).string),
                     })
 
             except:
@@ -75,25 +63,26 @@ class Base(TorrentProvider):
         return {
             'username': self.conf('username'),
             'password': self.conf('password'),
+            'remember_me': 'on',
             'login': 'submit',
         }
 
     def loginSuccess(self, output):
-        return 'logout.php' in output.lower() or 'Welcome' in output.lower()
+        return '/user/account/logout' in output.lower() or 'welcome back' in output.lower()
 
     loginCheckSuccess = loginSuccess
 
 
 config = [{
-    'name': 'torrentbytes',
+    'name': 'torrentleech',
     'groups': [
         {
             'tab': 'searcher',
             'list': 'torrent_providers',
-            'name': 'TorrentBytes',
-            'description': '<a href="http://torrentbytes.net">TorrentBytes</a>',
+            'name': 'TorrentLeech',
+            'description': '<a href="http://torrentleech.org">TorrentLeech</a>',
             'wizard': True,
-            'icon': 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAeFBMVEUAAAAAAEQAA1QAEmEAKnQALHYAMoEAOokAQpIASYsASZgAS5UATZwATosATpgAVJ0AWZwAYZ4AZKAAaZ8Ab7IAcbMAfccAgcQAgcsAhM4AiscAjMkAmt0AoOIApecAp/EAqvQAs+kAt+wA3P8A4f8A//8VAAAfDbiaAl08AAAAjUlEQVQYGQXBO04DQRAFwHqz7Z8sECIl5f73ISRD5GBs7UxTlWfg9vYXnvJRQJqOL88D6BAwJtMMumHUVCl60aa6H93IrIv0b+157f1lpk+fm87lMWrZH0vncKbXdRUQrRmrh9C6Iwkq6rg4PXZcyXmbizzeV/g+rDra0rGve8jPKLSOJNi2AQAwAGjwD7ApPkEHdtPQAAAAAElFTkSuQmCC',
+            'icon': 'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAACHUlEQVR4AZVSO48SYRSdGTCBEMKzILLAWiybkKAGMZRUUJEoDZX7B9zsbuQPYEEjNLTQkYgJDwsoSaxspEBsCITXjjNAIKi8AkzceXgmbHQ1NJ5iMufmO9/9zrmXlCSJ+B8o75J8Pp/NZj0eTzweBy0Wi4PBYD6f12o1r9ebTCZx+22HcrnMsuxms7m6urTZ7LPZDMVYLBZ8ZV3yo8aq9Pq0wzCMTqe77dDv9y8uLyAWBH6xWOyL0K/56fcb+rrPgPZ6PZfLRe1fsl6vCUmGKIqoqNXqdDr9Dbjps9znUV0uTqdTjuPkDoVCIfcuJ4gizjMMm8u9vW+1nr04czqdK56c37CbKY9j2+1WEARZ0Gq1RFHAz2q1qlQqXxoN69HRcDjUarW8ZD6QUigUOnY8uKYH8N1sNkul9yiGw+F6vS4Rxn8EsodEIqHRaOSnq9T7ajQazWQycEIR1AEBYDabSZJyHDucJyegwWBQr9ebTCaKvHd4cCQANUU9evwQ1Ofz4YvUKUI43GE8HouSiFiNRhOowWBIpVLyHITJkuW3PwgAEf3pgIwxF5r+OplMEsk3CPT5szCMnY7EwUdhwUh/CXiej0Qi3idPz89fdrpdbsfBzH7S3Q9K5pP4c0sAKpVKoVAQGO1ut+t0OoFAQHkH2Da/3/+but3uarWK0ZMQoNdyucRutdttmqZxMTzY7XaYxsrgtUjEZrNhkSwWyy/0NCatZumrNQAAAABJRU5ErkJggg==',
             'options': [
                 {
                     'name': 'enabled',

@@ -41,9 +41,12 @@ def toUnicode(original, *args):
                 try:
                     detected = detect(original)
                     try:
-                        return original.decode(detected.get('encoding'))
+                        if detected.get('confidence') > 0.8:
+                            return original.decode(detected.get('encoding'))
                     except:
-                        return ek(original, *args)
+                        pass
+
+                    return ek(original, *args)
                 except:
                     log.error('encoding.py: tryunicode vesen')
                     raise

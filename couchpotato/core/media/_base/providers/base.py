@@ -14,6 +14,11 @@ import traceback
 import xml.etree.ElementTree as XMLTree
 # import urllib2
 
+try:
+    from xml.etree.ElementTree import ParseError as XmlParseError
+except ImportError:
+    from xml.parsers.expat import ExpatError as XmlParseError
+
 from couchpotato.core.event import addEvent, fireEvent
 from couchpotato.core.helpers.encoding import ss
 from couchpotato.core.helpers.variable import tryFloat, mergeDicts, md5, \
@@ -105,7 +110,7 @@ class Provider(Plugin):
                 try:
                     data = XMLTree.fromstring(ss(data))
                     return self.getElements(data, item_path)
-                except XMLTree.ParseError:
+                except XmlParseError:
                     log.error('Invalid XML returned, check "%s" manually for issues', url)
                 except:
                     log.error('Failed to parsing %s: %s', (self.getName(), traceback.format_exc()))

@@ -3,9 +3,9 @@ from bs4 import BeautifulSoup
 from couchpotato.core.helpers.encoding import simplifyString, tryUrlencode
 from couchpotato.core.helpers.variable import tryInt
 from couchpotato.core.logger import CPLog
-#from couchpotato.core.providers.torrent.base import TorrentProvider
+# from couchpotato.core.providers.torrent.base import TorrentProvider
 
-#import traceback
+# import traceback
 import re
 import json
 import traceback
@@ -116,6 +116,21 @@ config = [{
                     'name': 'password',
                     'default': '',
                     'type': 'password',
+                },
+                {
+                    'name': 'seed_ratio',
+                    'label': 'Seed ratio',
+                    'type': 'float',
+                    'default': '1',
+                    'description': 'Seed until this ratio',
+                },
+                {
+                    'name': 'extra_score',
+                    'advanced': True,
+                    'label': 'Extra Score',
+                    'type': 'int',
+                    'default': 5,
+                    'description': 'Starting score for each release found via this provider.',
                 }
             ],
         }

@@ -217,7 +217,7 @@ class Plugin(object):
             }
             method = 'post' if len(data) > 0 or files else 'get'
 
-            log.info('Opening url: %s %s, data: %s', (method, url, [x for x in data.keys()] if isinstance(data, dict) else 'with data'))
+            log.info('[getCache] Opening url: %s %s, data: %s', (method, url, [x for x in data.keys()] if isinstance(data, dict) else 'with data'))
 #<<<<<<< HEAD
 #            log.info('Opening url: %s %s, data ')
 #            response = r.request(method, url, verify = False, **kwargs)
@@ -234,7 +234,7 @@ class Plugin(object):
             self.http_failed_request[host] = 0
         except (IOError, MaxRetryError, Timeout):
             if show_error:
-                log.error('Failed opening url in %s: %s %s', (self.getName(), url, traceback.format_exc(0)))
+                log.error('[getCache] Failed opening url in %s: %s %s', (self.getName(), url, traceback.format_exc(0)))
 
             # Save failed requests by hosts
             try:
@@ -333,7 +333,7 @@ class Plugin(object):
 
         if url:
             try:
-                log.debug('Getting URL %s ', url)
+                log.debug('[getCache] Getting URL %s ', url)
                 cache_timeout = 300
                 if 'cache_timeout' in kwargs:
                     cache_timeout = kwargs.get('cache_timeout')
@@ -347,7 +347,7 @@ class Plugin(object):
                 if not kwargs.get('show_error', True):
                     raise
 
-                log.debug('Failed getting cache: %s', (traceback.format_exc(0)))
+                log.debug('[getCache] Failed getting cache: %s', (traceback.format_exc(0)))
                 return ''
 
     def setCache(self, cache_key, value, timeout = 300):

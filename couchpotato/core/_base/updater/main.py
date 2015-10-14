@@ -240,7 +240,10 @@ class GitUpdater(BaseUpdater):
 
         log.info('Checking for new version on github for %s', self.repo_name)
         if not Env.get('dev'):
-            self.repo.fetch()
+            try:
+                self.repo.fetch()
+            except:
+                log.debug('Git fetch error.')
 
         current_branch = self.repo.getCurrentBranch().name
 
